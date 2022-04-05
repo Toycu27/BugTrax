@@ -18,9 +18,10 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Project::Class);
             $table->string('title');
-            $table->text('desc');
-            $table->timestamp('start_date');
-            $table->timestamp('end_date');
+            $table->string('slug')->unique();
+            $table->text('desc')->nullable();
+            $table->timestamp('start_date')->nullable();
+            $table->timestamp('end_date')->nullable();
             $table->timestamps();
         });
     }
