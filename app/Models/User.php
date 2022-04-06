@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Model\Bug;
-
+use App\Models\Bug;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    protected $with = [];
 
     /**
      * The attributes that are mass assignable.
@@ -45,6 +46,6 @@ class User extends Authenticatable
     ];
 
     public function bugs () {
-        return $this->hasMany(Bug::Class);
+        return $this->hasMany(Bug::Class, 'created_by');
     }
 }

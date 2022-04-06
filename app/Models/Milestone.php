@@ -11,6 +11,8 @@ class Milestone extends Model
 {
     use HasFactory;
 
+    protected $with = [];
+
     protected $guarded = ['id'];
 
     public function project () {

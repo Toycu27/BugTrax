@@ -14,6 +14,8 @@ class Bug extends Model
 {
     use HasFactory;
 
+    protected $with = [];
+
     protected $guarded = ['id'];
 
 
@@ -26,15 +28,15 @@ class Bug extends Model
     }
 
     public function createdBy () {
-        return $this->belongsTo(User::Class);
+        return $this->belongsTo(User::Class, 'created_by');
     }
 
     public function modifiedBy () {
-        return $this->belongsTo(User::Class);
+        return $this->belongsTo(User::Class, 'modified_by');
     }
 
     public function assignedTo () {
-        return $this->belongsTo(User::Class);
+        return $this->belongsTo(User::Class, 'assigned_to');
     }
 
     public function files () {

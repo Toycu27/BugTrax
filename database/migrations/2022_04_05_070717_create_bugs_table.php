@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Project;
 use App\Models\Milestone;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -19,7 +20,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Project::Class);
             $table->foreignIdFor(Milestone::Class)->nullable();
-            $table->foreignId('created_by');
+            $table->foreignIdFor(User::Class, 'created_by');
             $table->foreignId('modified_by')->nullable();
             $table->foreignId('assigned_to')->nullable();
             $table->boolean('published')->default(0);
