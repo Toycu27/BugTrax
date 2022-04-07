@@ -21,6 +21,8 @@ return new class extends Migration
             $table->foreignIdFor(Bug::Class);
             $table->text('message');
             $table->timestamps();
+
+            $table->foreign('bug_id')->references('id')->on('bugs')->cascadeOnDelete();
         });
     }
 

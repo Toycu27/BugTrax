@@ -26,13 +26,13 @@ class BugGetRequest extends FormRequest
     public function rules()
     {
         return [
-            'project_id' => 'nullable|integer',
+            'project_id' => 'integer',
             'milestone_id' => 'nullable|integer',
-            'created_by' => 'nullable|integer',
+            'created_by' => 'integer',
             'assigned_to' => 'nullable|integer',
-            'status' => 'nullable|string|max:16',
-            'title' => 'nullable|string|max:255',
-            'desc' => 'nullable|string|max:255',
+            'status' => 'string|max:16',
+            'title' => 'string|max:255',
+            'desc' => 'string|max:255',
         ];
     }
 

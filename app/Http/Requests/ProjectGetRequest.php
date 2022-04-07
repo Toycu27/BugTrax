@@ -27,8 +27,8 @@ class ProjectGetRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'nullable|string|max:255',
-            'desc' => 'nullable|string|max:255',
+            'title' => 'string|max:255',
+            'desc' => 'string|max:255',
         ];
     }
 

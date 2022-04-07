@@ -26,8 +26,8 @@ class UserGetRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
+            'name' => 'string|max:255',
+            'email' => 'email|max:255',
         ];
     }
 
