@@ -1,16 +1,10 @@
 <?php
 
-use App\Http\Controllers\BugsController;
-use App\Http\Controllers\MilestonesController;
-use App\Http\Controllers\ProjectsController;
-use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
-use App\Models\User;
-use App\Models\Project;
-use App\Models\Milestone;
-use App\Models\Bug;
-//use App\Models\File;
-//use App\Models\Comment;
+use App\Http\Controllers\BugController;
+use App\Http\Controllers\MilestoneController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -30,22 +24,22 @@ Route::get('/', function () {
 
 
 //User Routes
-Route::get('users', [UsersController::class, 'getUsers']);
-Route::get('user/{user}', [UsersController::class, 'getUser']);
+Route::get('users', [UserController::class, 'getUsers']);
+Route::get('user/{user}', [UserController::class, 'getUser']);
 
 
 //Project Routes
-Route::get('projects', [ProjectsController::class, 'getProjects']);
-Route::get('project/{project}', [ProjectsController::class, 'getProject']);
-Route::post('project', [ProjectsController::class, 'postProject']);
-Route::patch('project/{project}', [ProjectsController::class, 'patchProject']);
-Route::delete('project/{project}', [ProjectsController::class, 'deleteProject']);
+Route::get('projects', [ProjectController::class, 'getProjects']);
+Route::get('project/{project}', [ProjectController::class, 'getProject']);
+Route::post('project', [ProjectController::class, 'postProject']);
+Route::patch('project/{project}', [ProjectController::class, 'patchProject']);
+Route::delete('project/{project}', [ProjectController::class, 'deleteProject']);
 
 //Milestone Routes
-Route::get('milestones', [MilestonesController::class, 'getMilestones']);
-Route::get('milestone/{milestone:slug}', [MilestonesController::class, 'getMilestone']);
+Route::get('milestones', [MilestoneController::class, 'getMilestones']);
+Route::get('milestone/{milestone:slug}', [MilestoneController::class, 'getMilestone']);
 
 
 //Bug Routes
-Route::get('bugs', [BugsController::class, 'getBugs']);
-Route::get('bug/{bug}', [BugsController::class, 'getBug']);
+Route::get('bugs', [BugController::class, 'getBugs']);
+Route::get('bug/{bug}', [BugController::class, 'getBug']);
