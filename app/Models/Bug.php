@@ -46,4 +46,8 @@ class Bug extends Model
     public function comments () {
         return $this->hasMany(Comment::Class);
     }
+
+    public function scopeFilter($query, $filters) {
+        return $query;
+    }
 }

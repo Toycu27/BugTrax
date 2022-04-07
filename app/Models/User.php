@@ -48,4 +48,8 @@ class User extends Authenticatable
     public function bugs () {
         return $this->hasMany(Bug::Class, 'created_by');
     }
+
+    public function scopeFilter($query, $filters) {
+        return $query;
+    }
 }

@@ -4,21 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Requests\UserGetRequest;
 
 class UserController extends Controller
 {
-    public function getUsers (Request $request) {
+    public function getUsers (UserGetRequest $request) {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
-        //Build Query
+        //Build and Filter Query
         $users = User::latest('id');
-
-        //Filter Query
-        $filters = $request->filter ? json_decode($request->filter) : null;
-        if ($filters !== null) {
-            if (isset($filters->name)) $users->where('name', 'like', '%' . $filters->name . '%');
-            if (isset($filters->email)) $users->where('email', '=', $filters->email);
-        }
+        if ($request->name ?? false) $users->where('name', 'like', '%' . $request->name . '%');
+        if ($request->email ?? false) $users->where('email', '=', $request->email);
 
         return $users->with($withArr)->paginate(10)->withQueryString();
     }

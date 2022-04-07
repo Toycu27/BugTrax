@@ -4,25 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Project;
+use App\Http\Requests\ProjectGetRequest;
 
 class ProjectController extends Controller
 {
-    public function getProjects (Request $request) {
+    public function getProjects (ProjectGetRequest $request) {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
-        //Validate Request
-        
-
-        //Build Query
+        //Build and Filter Query
         $projects = Project::latest('id');
-
-        //Filter Query
-        $filters = $request->filter ? json_decode($request->filter) : null;
-        if ($filters !== null) {
-            if (isset($filters->slug)) $projects->where('slug', '=', $filters->slug);
-            if (isset($filters->title)) $projects->where('title', 'like', '%' . $filters->title . '%');
-            if (isset($filters->desc)) $projects->where('desc', 'like', '%' . $filters->desc . '%');
-        }
+        if ($request->title ?? false) $projects->where('title', 'like', '%' . $request->title . '%');
+        if ($request->desc ?? false) $projects->where('desc', 'like', '%' . $request->desc . '%');
         
         return $projects
             ->with($withArr)

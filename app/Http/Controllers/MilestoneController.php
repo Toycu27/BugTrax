@@ -4,22 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Milestone;
+use App\Http\Requests\MilestoneGetRequest;
 
 class MilestoneController extends Controller
 {
-    public function getMilestones (Request $request) {
+    public function getMilestones (MilestoneGetRequest $request) {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
-        //Build Query
+        //Build and Filter Query
         $milestones = Milestone::latest('id');
-
-        //Filter Query
-        $filters = $request->filter ? json_decode($request->filter) : null;
-        if ($filters !== null) {
-            if (isset($filters->slug)) $milestones->where('slug', '=', $filters->slug);
-            if (isset($filters->title)) $milestones->where('title', 'like', '%' . $filters->title . '%');
-            if (isset($filters->desc)) $milestones->where('desc', 'like', '%' . $filters->desc . '%');
-        }
+        if ($request->title ?? false) $milestones->where('title', 'like', '%' . $request->title . '%');
+        if ($request->desc ?? false) $milestones->where('desc', 'like', '%' . $request->desc . '%');
 
         return $milestones->with($withArr)->paginate(10)->withQueryString();
     }

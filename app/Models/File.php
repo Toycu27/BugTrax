@@ -17,4 +17,8 @@ class File extends Model
     public function bug () {
         return $this->belongsTo(Bug::Class);
     }
+
+    public function scopeFilter($query, $filters) {
+        return $query;
+    }
 }

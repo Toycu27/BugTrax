@@ -4,28 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Bug;
+use App\Http\Requests\BugGetRequest;
 
 class BugController extends Controller
 {
-    public function getBugs (Request $request) {
+    public function getBugs (BugGetRequest $request) {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
-        //Build Query
+        //Build and Filter Query
         $bugs = Bug::latest('id');
-
-        //Filter Query
-        $filters = $request->filter ? json_decode($request->filter) : null;
-        if ($filters !== null) {
-            if (isset($filters->project_id)) $bugs->where('project_id', '=', $filters->project_id);
-            if (isset($filters->milestone_id)) $bugs->where('milestone_id', '=', $filters->milestone_id);
-            if (isset($filters->created_by)) $bugs->where('created_by', '=', $filters->created_by);
-            if (isset($filters->assigned_to)) $bugs->where('assigned_to', '=', $filters->assigned_to);
-            if (isset($filters->status)) $bugs->where('status', '=', $filters->status);
-            if (isset($filters->slug)) $bugs->where('slug', '=', $filters->slug);
-            if (isset($filters->title)) $bugs->where('title', 'like', '%' . $filters->title . '%');
-            if (isset($filters->desc)) $bugs->where('desc', 'like', '%' . $filters->desc . '%');
-        }
-
+        if ($request->project_id ?? false) $bugs->where('project_id', '=', $request->project_id);
+        if ($request->milestone_id ?? false) $bugs->where('milestone_id', '=', $request->milestone_id);
+        if ($request->created_by ?? false) $bugs->where('created_by', '=', $request->created_by);
+        if ($request->assigned_to ?? false) $bugs->where('assigned_to', '=', $request->assigned_to);
+        if ($request->status ?? false) $bugs->where('status', '=', $request->status);
+        if ($request->title ?? false) $bugs->where('title', 'like', '%' . $request->title . '%');
+        if ($request->desc ?? false) $bugs->where('desc', 'like', '%' . $request->desc . '%');
+    
         return $bugs->with($withArr)->paginate(10)->withQueryString();
     }
 

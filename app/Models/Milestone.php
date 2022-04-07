@@ -22,4 +22,8 @@ class Milestone extends Model
     public function bugs () {
         return $this->hasMany(Bug::Class);
     }
+
+    public function scopeFilter($query, $filters) {
+        return $query;
+    }
 }
