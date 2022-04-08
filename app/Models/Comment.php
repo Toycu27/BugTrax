@@ -12,14 +12,14 @@ class Comment extends Model
 
     protected $with = [];
 
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'user_id'];
 
     public function user () {
-        return $this->belongsTo(User::Class);
+        return $this->belongsTo(User::class);
     }
 
     public function bug () {
-        return $this->belongsTo(Bug::Class);
+        return $this->belongsTo(Bug::class);
     }
 
     public function scopeFilter($query, $filters) {

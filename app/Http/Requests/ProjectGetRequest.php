@@ -16,6 +16,7 @@ class ProjectGetRequest extends FormRequest
      */
     public function authorize()
     {
+        
         return true;
     }
 

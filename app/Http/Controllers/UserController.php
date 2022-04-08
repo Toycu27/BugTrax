@@ -8,7 +8,7 @@ use App\Http\Requests\UserGetRequest;
 
 class UserController extends Controller
 {
-    public function getUsers (UserGetRequest $request) {
+    public function index (UserGetRequest $request) {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
         //Build and Filter Query
@@ -19,9 +19,21 @@ class UserController extends Controller
         return $users->with($withArr)->paginate(10)->withQueryString();
     }
 
-    public function getUser (Request $request, User $user) {
+    public function show (Request $request, User $user) {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
-        return $user->load($withArr);
+        return response()->json($user->load($withArr), 200);
+    }
+
+    public function update (Request $request, User $user) {
+        $user->update($request->all());
+    
+        return response()->json($user, 200);
+    }
+
+    public function delete (Request $request, User $user) {
+        $user->destroy($user->id);
+
+        return response()->json(null, 204);
     }
 }

@@ -16,35 +16,35 @@ class Bug extends Model
 
     protected $with = [];
 
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'created_by', 'modified_by'];
 
 
     public function project () {
-        return $this->belongsTo(Project::Class);
+        return $this->belongsTo(Project::class);
     }
 
     public function milestone () {
-        return $this->belongsTo(Milestone::Class);
+        return $this->belongsTo(Milestone::class);
     }
 
     public function createdBy () {
-        return $this->belongsTo(User::Class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function modifiedBy () {
-        return $this->belongsTo(User::Class, 'modified_by');
+        return $this->belongsTo(User::class, 'modified_by');
     }
 
     public function assignedTo () {
-        return $this->belongsTo(User::Class, 'assigned_to');
+        return $this->belongsTo(User::class, 'assigned_to');
     }
 
     public function files () {
-        return $this->hasMany(File::Class);
+        return $this->hasMany(File::class);
     }
 
     public function comments () {
-        return $this->hasMany(Comment::Class);
+        return $this->hasMany(Comment::class);
     }
 
     public function scopeFilter($query, $filters) {

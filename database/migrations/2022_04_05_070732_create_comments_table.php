@@ -17,12 +17,10 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::Class);
-            $table->foreignIdFor(Bug::Class);
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Bug::class)->constrained()->cascadeOnDelete();
             $table->text('message');
             $table->timestamps();
-
-            $table->foreign('bug_id')->references('id')->on('bugs')->cascadeOnDelete();
         });
     }
 

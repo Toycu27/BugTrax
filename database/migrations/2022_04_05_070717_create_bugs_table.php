@@ -18,9 +18,9 @@ return new class extends Migration
     {
         Schema::create('bugs', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Project::Class);
-            $table->foreignIdFor(Milestone::Class)->nullable();
-            $table->foreignIdFor(User::Class, 'created_by');
+            $table->foreignIdFor(Project::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Milestone::class)->nullable();
+            $table->foreignIdFor(User::class, 'created_by');
             $table->foreignId('modified_by')->nullable();
             $table->foreignId('assigned_to')->nullable();
             $table->boolean('published')->default(0);
@@ -44,8 +44,6 @@ return new class extends Migration
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
             $table->timestamps();
-
-            $table->foreign('project_id')->references('id')->on('projects')->cascadeOnDelete();
         });
     }
 

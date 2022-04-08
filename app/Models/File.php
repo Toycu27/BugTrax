@@ -11,11 +11,10 @@ class File extends Model
     use HasFactory;
 
     protected $with = [];
-
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'user_id'];
 
     public function bug () {
-        return $this->belongsTo(Bug::Class);
+        return $this->belongsTo(Bug::class);
     }
 
     public function scopeFilter($query, $filters) {

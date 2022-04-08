@@ -16,11 +16,11 @@ class Milestone extends Model
     protected $guarded = ['id'];
 
     public function project () {
-        return $this->belongsTo(Project::Class);
+        return $this->belongsTo(Project::class);
     }
 
     public function bugs () {
-        return $this->hasMany(Bug::Class);
+        return $this->hasMany(Bug::class);
     }
 
     public function scopeFilter($query, $filters) {

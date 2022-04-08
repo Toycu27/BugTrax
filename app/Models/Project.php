@@ -16,11 +16,11 @@ class Project extends Model
     protected $guarded = ['id'];
 
     public function milestones () {
-        return $this->hasMany(Milestone::Class);
+        return $this->hasMany(Milestone::class);
     }
 
     public function bugs () {
-        return $this->hasMany(Bug::Class);
+        return $this->hasMany(Bug::class);
     }
 
     public function scopeFilter($query, $filters) {
