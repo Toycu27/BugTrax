@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\BugRequest;
 use App\Models\Bug;
-use App\Http\Requests\BugGetRequest;
+use Illuminate\Support\Str;
 
 class BugController extends Controller
 {
-    public function index (BugGetRequest $request) {
+    public function show (BugRequest $request, Bug $bug) {
+        $withArr = $request->with ? explode(',', $request->with) : [];
+
+        return response()->json($bug->load($withArr), 200);
+    }
+
+    public function index (BugRequest $request) {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
         //Build and Filter Query
@@ -24,25 +30,23 @@ class BugController extends Controller
         return $bugs->with($withArr)->paginate(10)->withQueryString();
     }
 
-    public function show (Request $request, Bug $bug) {
-        $withArr = $request->with ? explode(',', $request->with) : [];
-
-        return response()->json($bug->load($withArr), 200);
-    }
-
-    public function store (Request $request) {
-        $bug =  Bug::create($request->all());
+    public function store (BugRequest $request) {
+        $bug = new Bug();
+        $bug->fill($request->all());
+        $bug->slug = Str::slug($bug->title);
+        $bug->save();
 
         return response()->json($bug, 201);
     }
 
-    public function update (Request $request, Bug $bug) {
+    public function update (BugRequest $request, Bug $bug) {
+        $bug->slug = Str::slug($request->title);
         $bug->update($request->all());
     
         return response()->json($bug, 200);
     }
 
-    public function delete (Request $request, Bug $bug) {
+    public function delete (BugRequest $request, Bug $bug) {
         $bug->destroy($bug->id);
 
         return response()->json(null, 204);

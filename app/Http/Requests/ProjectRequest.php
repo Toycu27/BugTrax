@@ -5,8 +5,9 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Request;
 
-class BugGetRequest extends FormRequest
+class ProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,6 +16,7 @@ class BugGetRequest extends FormRequest
      */
     public function authorize()
     {
+        
         return true;
     }
 
@@ -23,17 +25,27 @@ class BugGetRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
-        return [
-            'project_id' => 'integer',
-            'milestone_id' => 'nullable|integer',
-            'created_by' => 'integer',
-            'assigned_to' => 'nullable|integer',
-            'status' => 'string|max:16',
-            'title' => 'string|max:255',
-            'desc' => 'string|max:255',
-        ];
+        switch ($request->method()) {
+            case 'GET':
+                return [
+                    'title' => ['string', 'max:255'],
+                    'desc' =>  ['string', 'max:255'],
+                ];
+            case 'POST':
+                return [
+                    'title' => ['required', 'string', 'unique:projects', 'max:255'],
+                    'desc' => ['required', 'string', 'max:255'],
+                ];
+            case 'PATCH':
+                return [
+                    'title' => ['string', 'max:255'],
+                    'desc' => ['string', 'max:255'],
+                ];
+            case 'DELETE':
+                return [];
+        }
     }
 
     /**

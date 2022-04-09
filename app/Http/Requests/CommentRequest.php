@@ -5,8 +5,9 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Request;
 
-class MilestoneGetRequest extends FormRequest
+class CommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +24,21 @@ class MilestoneGetRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
-        return [
-            'title' => 'string|max:255',
-            'desc' => 'string|max:255',
-        ];
+        switch ($request->method()) {
+            case 'POST':
+                return [
+                    'bug_id' => ['required', 'integer', 'exists:bugs,id'],
+                    'message' => ['required', 'string', 'min:3'],
+                ];
+            case 'PATCH':
+                return [
+                    'message' => ['required', 'string', 'min:3'],
+                ];
+            case 'DELETE':
+                return [];
+        }
     }
 
     /**
