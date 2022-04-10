@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
 use App\Models\Project;
 use App\Models\Milestone;
@@ -12,13 +13,22 @@ use App\Models\Comment;
 
 class Bug extends Model
 {
+    //Traits
     use HasFactory;
+    use SoftDeletes;
 
     protected $with = [];
-
     protected $guarded = ['id', 'created_by', 'modified_by'];
 
+    protected $dates = [
+        'start_date',
+        'end_date',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
+    //Relations
     public function project () {
         return $this->belongsTo(Project::class);
     }
@@ -45,9 +55,5 @@ class Bug extends Model
 
     public function comments () {
         return $this->hasMany(Comment::class);
-    }
-
-    public function scopeFilter($query, $filters) {
-        return $query;
     }
 }

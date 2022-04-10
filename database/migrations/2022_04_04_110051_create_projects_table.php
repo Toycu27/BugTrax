@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('desc')->nummable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

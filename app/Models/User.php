@@ -45,11 +45,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    //Relations
     public function bugs () {
         return $this->hasMany(Bug::class, 'created_by');
     }
 
-    public function scopeFilter($query, $filters) {
-        return $query;
-    }
 }
