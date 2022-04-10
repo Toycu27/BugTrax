@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BugRequest;
+use Illuminate\Http\JsonResponse;
 use App\Models\Bug;
 use Illuminate\Support\Str;
 
 class BugController extends Controller
 {
-    public function show (BugRequest $request, Bug $bug) {
+
+    public function show (BugRequest $request, Bug $bug): JsonResponse {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
         return response()->json($bug->load($withArr), 200);
     }
 
-    public function index (BugRequest $request) {
+    public function index (BugRequest $request): JsonResponse {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
         //Build and Filter Query
@@ -27,10 +29,13 @@ class BugController extends Controller
         if ($request->title ?? false) $bugs->where('title', 'like', '%' . $request->title . '%');
         if ($request->desc ?? false) $bugs->where('desc', 'like', '%' . $request->desc . '%');
     
-        return $bugs->with($withArr)->paginate(10)->withQueryString();
+        return response()->json(
+            $bugs->with($withArr)->paginate(10)->withQueryString(), 
+            200
+        );
     }
 
-    public function store (BugRequest $request) {
+    public function store (BugRequest $request): JsonResponse {
         $bug = new Bug();
         $bug->fill($request->all());
         $bug->slug = Str::slug($bug->title);
@@ -39,14 +44,14 @@ class BugController extends Controller
         return response()->json($bug, 201);
     }
 
-    public function update (BugRequest $request, Bug $bug) {
+    public function update (BugRequest $request, Bug $bug): JsonResponse {
         $bug->slug = Str::slug($request->title);
         $bug->update($request->all());
     
         return response()->json($bug, 200);
     }
 
-    public function delete (BugRequest $request, Bug $bug) {
+    public function delete (BugRequest $request, Bug $bug): JsonResponse {
         $bug->destroy($bug->id);
 
         return response()->json(null, 204);
