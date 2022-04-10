@@ -10,7 +10,7 @@ use App\Models\Milestone;
 use App\Models\Bug;
 use App\Models\File;
 use App\Models\Comment;
-
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,54 +22,37 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         //Truncate all Tables
-        User::truncate();
-        Project::truncate();
-        Milestone::truncate();
+        Schema::disableForeignKeyConstraints();
         Bug::truncate();
-        Comment::truncate();
         File::truncate();
+        Comment::truncate();
+        Milestone::truncate();
+        Project::truncate();
+        User::truncate();
+        Schema::enableForeignKeyConstraints();
 
         //Seed Database with Faker
-        User::factory(3)->create();
-        Project::factory(1)->create();
-        Milestone::factory(2)->create();
-        Bug::factory(5)->create();
-        Comment::factory(10)->create();
-
-        //Seed Database without Faker
-        $user = User::Create([
-            'name' => 'Toycu',
-            'email' => 'somerandom@emailclient.com',
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-            'remember_token' => '1234567890',
+        $users = User::factory(3)->create();
+        $projects = Project::factory(2)->create();
+        $milestones_a = Milestone::factory(2)->create(['project_id' => $projects[0]]);
+        $milestones_b = Milestone::factory(2)->create(['project_id' => $projects[1]]);
+        $bugs_a = Bug::factory(5)->create([
+            'project_id' => $projects[0], 
+            'milestone_id' => $milestones_a[0], 
+            'created_by' => $users[0]
         ]);
-
-        $project = Project::Create([
-            'title' => 'BugTrax',
-            'slug' => 'bugtrax',
-            'desc' => 'Bug Tracking Web Application',
+        $bugs_b = Bug::factory(5)->create([
+            'project_id' => $projects[1], 
+            'milestone_id' => $milestones_b[0], 
+            'created_by' => $users[1]
         ]);
-
-        $milestone = Milestone::Create([
-            'project_id' => $project->id,
-            'title' => 'Alpha Release',
-            'slug' => 'alpha_release',
+        Comment::factory(5)->create([
+            'user_id' => $users[0], 
+            'bug_id' => $bugs_a[0]
         ]);
-
-        $bug = Bug::Create([
-            'project_id' => $project->id,
-            'milestone_id' => $milestone->id,
-            'created_by' => 1,
-            'title' => 'My first Bug',
-            'slug' => 'my_first_bug',
-            'desc' => 'Bug description',
-        ]);
-
-        Comment::Create([
-            'user_id' => $user->id,
-            'bug_id' => $bug->id,
-            'message' => 'My First Comment',
+        Comment::factory(5)->create([
+            'user_id' => $users[1], 
+            'bug_id' => $bugs_b[0]
         ]);
     }
 }

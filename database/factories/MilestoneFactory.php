@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Project;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Milestone>
@@ -17,10 +18,11 @@ class MilestoneFactory extends Factory
      */
     public function definition()
     {
+        $title = $this->faker->sentence();
         return [
             'project_id' => Project::factory(),
-            'title' => $this->faker->sentence(),
-            'slug' => $this->faker->slug(),
+            'title' => $title,
+            'slug' => Str::slug($title),
             'desc' => $this->faker->paragraph(),
         ];
     }
