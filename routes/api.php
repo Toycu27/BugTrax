@@ -18,29 +18,24 @@ use App\Http\Controllers\UserController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth')->group(function () {
     //User Routes
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::resource('users', UserController::class)
+        ->only('index', 'show');
 
+    //Project Routes
+    Route::resource('projects', ProjectController::class)
+        ->only('index', 'show', 'store', 'update', 'delete');
 
+    //Milestone Routes
+    Route::resource('milestones', MilestoneController::class)
+        ->only('index', 'show', 'store', 'update', 'delete');
 
+    //Bug Routes
+    Route::resource('bugs', BugController::class)
+        ->only('index', 'show', 'store', 'update', 'delete');
 
+    //Comment Routes
+    Route::resource('comments', CommentController::class)
+        ->only('store', 'update', 'delete');
 });
-
-//User Routes
-Route::resource('users', UserController::class)->only('index', 'show');
-
-//Project Routes
-Route::resource('projects', ProjectController::class)->only('index', 'show', 'store', 'update', 'delete');
-
-//Milestone Routes
-Route::resource('milestones', MilestoneController::class)->only('index', 'show', 'store', 'update', 'delete');
-
-//Bug Routes
-Route::resource('bugs', BugController::class)->only('index', 'show', 'store', 'update', 'delete');
-
-//Comment Routes
-Route::resource('comments', CommentController::class)->only('store', 'update', 'delete');
