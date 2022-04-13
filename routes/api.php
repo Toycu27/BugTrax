@@ -18,8 +18,11 @@ use App\Http\Controllers\UserController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     //User Routes
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
     Route::resource('users', UserController::class)
         ->only('index', 'show');
 
