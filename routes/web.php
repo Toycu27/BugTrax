@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -11,7 +12,6 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -69,4 +69,7 @@ Route::post('/sanctum/token', function (Request $request) {
 
 Route::delete('sanctum/token', function (Request $request) {
     $request->user()->tokens()->delete();
+    Session::flush();
+
+    return response()->json();
 })->middleware('auth:sanctum');
