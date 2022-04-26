@@ -21,10 +21,14 @@ use App\Http\Controllers\UserController;
 Route::middleware('auth:sanctum')->group(function () {
     //User Routes
     Route::get('/user', function (Request $request) {
-        return $request->user();
+
+        return response()->json([
+            'success' => true, 
+            'data' => $request->user()
+        ], 200);
     });
     Route::resource('users', UserController::class)
-        ->only('index', 'show');
+        ->only('index', 'show', 'update');
 
     //Project Routes
     Route::resource('projects', ProjectController::class)

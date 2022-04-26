@@ -50,6 +50,11 @@ class NewPasswordController extends Controller
             ]);
         }
 
-        return response()->json(['status' => __($status)]);
+        return response()->json([
+            'status' => __($status),
+            'success' => true, 
+            'data' => null,
+            'message' => 'Your Password has been reset.',
+        ], 200);
     }
 }

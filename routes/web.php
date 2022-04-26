@@ -62,14 +62,20 @@ Route::post('/sanctum/token', function (Request $request) {
     }
 
     return response()->json([
-        'token' => $user->createToken($request->device_name)->plainTextToken,
-        'user' => $user,
-    ]);
+        'success' => true,
+        'data' => [
+            'token' => $user->createToken($request->device_name)->plainTextToken,
+            'user' => $user,
+        ]
+    ], 200);
 });
 
 Route::delete('sanctum/token', function (Request $request) {
     $request->user()->tokens()->delete();
     Session::flush();
 
+    return response()->json([
+        'success' => true
+    ], 200);
     return response()->json();
 })->middleware('auth:sanctum');

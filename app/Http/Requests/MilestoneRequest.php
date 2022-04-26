@@ -14,9 +14,22 @@ class MilestoneRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(Request $request)
     {
-        return true;
+        $user_role = auth()->user()->role;
+        
+        $perms = [
+            'Admin' => ['GET', 'POST', 'PATCH', 'DELETE'],
+            'Manager' => ['GET', 'POST', 'PATCH', 'DELETE'],
+            'Member' => ['GET'],
+            'Client' => ['GET'],
+        ];
+
+        if (in_array($request->method(), $perms[$user_role])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

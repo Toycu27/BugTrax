@@ -14,10 +14,22 @@ class ProjectRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(Request $request)
     {
+        $user_role = auth()->user()->role;
         
-        return true;
+        $perms = [
+            'Admin' => ['GET', 'POST', 'PATCH', 'DELETE'],
+            'Manager' => ['GET', 'POST', 'PATCH', 'DELETE'],
+            'Member' => ['GET'],
+            'Client' => ['GET'],
+        ];
+
+        if (in_array($request->method(), $perms[$user_role])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

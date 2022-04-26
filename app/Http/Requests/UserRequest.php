@@ -14,9 +14,22 @@ class UserRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(Request $request)
     {
-        return true;
+        $user_role = auth()->user()->role;
+        
+        $perms = [
+            'Admin' => ['GET', 'POST', 'PATCH', 'DELETE'],
+            'Manager' => ['GET', 'POST', 'PATCH', 'DELETE'],
+            'Member' => ['GET', 'POST', 'PATCH', 'DELETE'],
+            'Client' => ['GET', 'POST', 'PATCH', 'DELETE'],
+        ];
+
+        if (in_array($request->method(), $perms[$user_role])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -31,6 +44,7 @@ class UserRequest extends FormRequest
                 return [
                     'name' => ['string', 'max:255'],
                     'email' => ['email', 'max:255'],
+                    'role' => ['string', 'max:32'],
                 ];
             case 'POST':
                 return [
@@ -41,6 +55,10 @@ class UserRequest extends FormRequest
                 return [
                     'name' => ['string', 'max:255'],
                     'email' => ['email', 'unique:users', 'max:255'],
+                    'password_current' => ['current_password'],
+                    'password' => ['string', 'max:255'],
+                    'password_confirm' => ['same:password'],
+                    'role' => ['string', 'max:32'],
                 ];
             case 'DELETE':
                 return [];
@@ -57,7 +75,7 @@ class UserRequest extends FormRequest
         throw new HttpResponseException(response()->json([
             'success'   => false,
             'message'   => 'Validation errors',
-            'data'      => $validator->errors()
-        ]));
+            'errors'    => $validator->errors()
+        ], 400));
     }
 }
