@@ -35,19 +35,31 @@ class MilestoneController extends Controller
         $milestone->slug = Str::slug($milestone->title);
         $milestone->save();
 
-        return response()->json($milestone, 201);
+        return response()->json([
+            'success' => true,
+            'data' => $milestone,
+            'message' => 'Milestone has been created.',
+        ], 201);
     }
 
     public function update (MilestoneRequest $request, Milestone $milestone): JsonResponse {
         $milestone->slug = Str::slug($request->title);
         $milestone->update($request->all());
     
-        return response()->json($milestone, 200);
+        return response()->json([
+            'success' => true,
+            'data' => $milestone,
+            'message' => 'Milestone has been updated.',
+        ], 200);
     }
 
     public function delete (MilestoneRequest $request, Milestone $milestone): JsonResponse {
         $milestone->destroy($milestone->id);
 
-        return response()->json(null, 204);
+        return response()->json([
+            'success' => true,
+            'data' => null,
+            'message' => 'Milestone has been deleted.',
+        ], 204);
     }
 }

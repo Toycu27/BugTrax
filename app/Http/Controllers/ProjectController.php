@@ -35,19 +35,31 @@ class ProjectController extends Controller
         $project->slug = Str::slug($project->title);
         $project->save();
 
-        return response()->json($project, 201);
+        return response()->json([
+            'success' => true,
+            'data' => $project,
+            'message' => 'Project has been created.',
+        ], 201);
     }
 
     public function update (ProjectRequest $request, Project $project): JsonResponse {
         $project->slug = Str::slug($request->title);
         $project->update($request->all());
     
-        return response()->json($project, 200);
+        return response()->json([
+            'success' => true,
+            'data' => $project,
+            'message' => 'Project has been updated.',
+        ], 200);
     }
 
     public function delete (ProjectRequest $request, Project $project): JsonResponse {
         $project->destroy($project->id);
 
-        return response()->json(null, 204);
+        return response()->json([
+            'success' => true,
+            'data' => null,
+            'message' => 'Project has been deleted.',
+        ], 204);
     }
 }

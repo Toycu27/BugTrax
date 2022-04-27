@@ -29,18 +29,30 @@ class CommentController extends Controller
         $comment->user_id = 1;
         $comment->save();
 
-        return response()->json($comment, 201);
+        return response()->json([
+            'success' => true,
+            'data' => $comment,
+            'message' => 'Comment has been created.',
+        ], 201);
     }
 
     public function update (CommentRequest $request, Comment $comment): JsonResponse {
         $comment->update($request->all());
     
-        return response()->json($comment, 200);
+        return response()->json([
+            'success' => true,
+            'data' => $comment,
+            'message' => 'Comment has been updated.',
+        ], 200);
     }
 
     public function delete (CommentRequest $request, Comment $comment): JsonResponse {
         $comment->destroy($comment->id);
 
-        return response()->json(null, 204);
+        return response()->json([
+            'success' => true,
+            'data' => null,
+            'message' => 'Comment has been deleted.',
+        ], 204);
     }
 }

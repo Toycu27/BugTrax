@@ -41,19 +41,31 @@ class BugController extends Controller
         $bug->slug = Str::slug($bug->title);
         $bug->save();
 
-        return response()->json($bug, 201);
+        return response()->json([
+            'success' => true,
+            'data' => $bug,
+            'message' => 'Bug has been created.',
+        ], 201);
     }
 
     public function update (BugRequest $request, Bug $bug): JsonResponse {
         $bug->slug = Str::slug($request->title);
         $bug->update($request->all());
     
-        return response()->json($bug, 200);
+        return response()->json([
+            'success' => true,
+            'data' => $bug,
+            'message' => 'Bug has been updated.',
+        ], 200);
     }
 
     public function delete (BugRequest $request, Bug $bug): JsonResponse {
         $bug->destroy($bug->id);
 
-        return response()->json(null, 204);
+        return response()->json([
+            'success' => true,
+            'data' => null,
+            'message' => 'Bug has been deleted.',
+        ], 204);
     }
 }
