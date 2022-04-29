@@ -39,6 +39,7 @@ class BugController extends Controller
         $bug = new Bug();
         $bug->fill($request->all());
         $bug->slug = Str::slug($bug->title);
+        $bug->created_by = auth()->user()->id;
         $bug->save();
 
         return response()->json([
@@ -50,6 +51,7 @@ class BugController extends Controller
 
     public function update (BugRequest $request, Bug $bug): JsonResponse {
         $bug->slug = Str::slug($request->title);
+        $bug->modified_by = auth()->user()->id;
         $bug->update($request->all());
     
         return response()->json([
