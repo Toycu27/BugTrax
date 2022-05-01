@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 
 class CommentRequest extends FormRequest
@@ -17,7 +17,7 @@ class CommentRequest extends FormRequest
     public function authorize(Request $request)
     {
         $user_role = auth()->user()->role;
-        
+
         $perms = [
             'Admin' => ['GET', 'POST', 'PATCH', 'DELETE'],
             'Manager' => ['GET', 'POST', 'PATCH', 'DELETE'],
@@ -56,15 +56,15 @@ class CommentRequest extends FormRequest
 
     /**
      * Throw exception if validation failes
-     * 
+     *
      * @return void
      */
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'success'   => false,
-            'message'   => 'Validation errors',
-            'errors'      => $validator->errors()
+            'success' => false,
+            'message' => 'Validation errors',
+            'errors' => $validator->errors(),
         ]));
     }
 }

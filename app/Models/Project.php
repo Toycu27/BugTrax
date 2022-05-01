@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Bug;
+use App\Models\Milestone;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Milestone;
-use App\Models\Bug;
 
 class Project extends Model
 {
@@ -23,12 +23,14 @@ class Project extends Model
         'deleted_at',
     ];
 
-    public function milestones () {
+    public function milestones()
+    {
         return $this->hasMany(Milestone::class);
     }
 
     //Relations
-    public function bugs () {
+    public function bugs()
+    {
         return $this->hasMany(Bug::class);
     }
 

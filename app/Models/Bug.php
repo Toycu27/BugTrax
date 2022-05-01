@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Comment;
+use App\Models\File;
+use App\Models\Milestone;
+use App\Models\Project;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\User;
-use App\Models\Project;
-use App\Models\Milestone;
-use App\Models\File;
-use App\Models\Comment;
 
 class Bug extends Model
 {
@@ -21,7 +21,6 @@ class Bug extends Model
     protected $guarded = ['id', 'created_by', 'modified_by'];
 
     protected $dates = [
-        'start_date',
         'end_date',
         'created_at',
         'updated_at',
@@ -29,31 +28,38 @@ class Bug extends Model
     ];
 
     //Relations
-    public function project () {
+    public function project()
+    {
         return $this->belongsTo(Project::class);
     }
 
-    public function milestone () {
+    public function milestone()
+    {
         return $this->belongsTo(Milestone::class);
     }
 
-    public function createdBy () {
+    public function createdBy()
+    {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function modifiedBy () {
+    public function modifiedBy()
+    {
         return $this->belongsTo(User::class, 'modified_by');
     }
 
-    public function assignedTo () {
+    public function assignedTo()
+    {
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
-    public function files () {
+    public function files()
+    {
         return $this->hasMany(File::class);
     }
 
-    public function comments () {
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 }

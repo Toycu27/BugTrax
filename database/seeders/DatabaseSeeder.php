@@ -2,14 +2,13 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Project;
-use App\Models\Milestone;
 use App\Models\Bug;
-use App\Models\File;
 use App\Models\Comment;
+use App\Models\File;
+use App\Models\Milestone;
+use App\Models\Project;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
@@ -37,22 +36,22 @@ class DatabaseSeeder extends Seeder
         $milestones_a = Milestone::factory(2)->create(['project_id' => $projects[0]]);
         $milestones_b = Milestone::factory(2)->create(['project_id' => $projects[1]]);
         $bugs_a = Bug::factory(5)->create([
-            'project_id' => $projects[0], 
-            'milestone_id' => $milestones_a[0], 
-            'created_by' => $users[0]
+            'project_id' => $projects[0],
+            'milestone_id' => $milestones_a[0],
+            'created_by' => $users[0],
         ]);
         $bugs_b = Bug::factory(5)->create([
-            'project_id' => $projects[1], 
-            'milestone_id' => $milestones_b[0], 
-            'created_by' => $users[1]
+            'project_id' => $projects[1],
+            'milestone_id' => $milestones_b[0],
+            'created_by' => $users[1],
         ]);
         Comment::factory(5)->create([
-            'user_id' => $users[0], 
-            'bug_id' => $bugs_a[0]
+            'user_id' => $users[0],
+            'bug_id' => $bugs_a[0],
         ]);
         Comment::factory(5)->create([
-            'user_id' => $users[1], 
-            'bug_id' => $bugs_b[0]
+            'user_id' => $users[1],
+            'bug_id' => $bugs_b[0],
         ]);
     }
 }

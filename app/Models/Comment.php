@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Bug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Bug;
 
 class Comment extends Model
 {
@@ -20,11 +20,13 @@ class Comment extends Model
     ];
 
     //Relations
-    public function user () {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function bug () {
+    public function bug()
+    {
         return $this->belongsTo(Bug::class);
     }
 }

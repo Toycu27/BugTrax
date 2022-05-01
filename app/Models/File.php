@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Bug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Bug;
 
 class File extends Model
 {
@@ -20,7 +20,8 @@ class File extends Model
     ];
 
     //Relations
-    public function bug () {
+    public function bug()
+    {
         return $this->belongsTo(Bug::class);
     }
 }

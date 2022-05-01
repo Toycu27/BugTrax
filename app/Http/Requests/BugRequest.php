@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 
 class BugRequest extends FormRequest
@@ -17,7 +17,7 @@ class BugRequest extends FormRequest
     public function authorize(Request $request)
     {
         $user_role = auth()->user()->role;
-        
+
         $perms = [
             'Admin' => ['GET', 'POST', 'PATCH', 'DELETE'],
             'Manager' => ['GET', 'POST', 'PATCH', 'DELETE'],
@@ -55,22 +55,18 @@ class BugRequest extends FormRequest
                     'project_id' => ['required', 'integer', 'exists:projects,id'],
                     'milestone_id' => ['integer', 'exists:milestones,id', 'nullable'],
                     'assigned_to' => ['integer', 'exists:users,id', 'nullable'],
-                    'published' => ['required', 'boolean'],
                     'status' => ['required', 'string', 'max:32'],
                     'priority' => ['required', 'string', 'max:32'],
                     'progress' => ['required', 'integer', 'between:0,100'],
-                    'estimated_hours' => ['integer', 'nullable'],
-                    'actual_hours' => ['integer', 'nullable'],
+                    'difficulty' => ['required', 'string', 'max:32'],
                     'title' => ['required', 'string', 'max:255'],
                     'desc' => ['required', 'string', 'max:255'],
-                    'reproduce_desc' => ['string', 'max:255', 'nullable'],
                     'solution_desc' => ['string', 'max:255', 'nullable'],
                     'url' => ['URL', 'max:255', 'nullable'],
                     'device_type' => ['string', 'max:32', 'nullable'],
                     'device_os' => ['string', 'max:32', 'nullable'],
                     'browser_info' => ['string', 'max:255', 'nullable'],
                     'tags' => ['json', 'max:255', 'nullable'],
-                    'start_date' => ['date', 'nullable'],
                     'end_date' => ['date', 'nullable'],
                 ];
             case 'PATCH':
@@ -78,22 +74,18 @@ class BugRequest extends FormRequest
                     'project_id' => ['integer', 'exists:projects,id'],
                     'milestone_id' => ['integer', 'exists:milestones,id', 'nullable'],
                     'assigned_to' => ['integer', 'exists:users,id', 'nullable'],
-                    'published' => ['boolean'],
                     'status' => ['string', 'max:32'],
                     'priority' => ['string', 'max:32'],
                     'progress' => ['integer', 'between:0,100'],
-                    'estimated_hours' => ['integer', 'nullable'],
-                    'actual_hours' => ['integer', 'nullable'],
+                    'difficulty' => ['string', 'max:32'],
                     'title' => ['string', 'max:255'],
                     'desc' => ['string', 'max:255'],
-                    'reproduce_desc' => ['string', 'max:255', 'nullable'],
                     'solution_desc' => ['string', 'max:255', 'nullable'],
                     'url' => ['URL', 'max:255', 'nullable'],
                     'device_type' => ['string', 'max:32', 'nullable'],
                     'device_os' => ['string', 'max:32', 'nullable'],
                     'browser_info' => ['string', 'max:255', 'nullable'],
                     'tags' => ['json', 'max:255', 'nullable'],
-                    'start_date' => ['date', 'nullable'],
                     'end_date' => ['date', 'nullable'],
                 ];
             case 'DELETE':
@@ -103,15 +95,15 @@ class BugRequest extends FormRequest
 
     /**
      * Throw exception if validation failes
-     * 
+     *
      * @return void
      */
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'success'   => false,
-            'message'   => 'Validation errors',
-            'errors'      => $validator->errors()
+            'success' => false,
+            'message' => 'Validation errors',
+            'errors' => $validator->errors(),
         ]));
     }
 }

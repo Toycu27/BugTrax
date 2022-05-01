@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Bug;
+use App\Models\Project;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Project;
-use App\Models\Bug;
 
 class Milestone extends Model
 {
@@ -16,7 +16,7 @@ class Milestone extends Model
 
     protected $with = [];
     protected $guarded = ['id'];
-    
+
     protected $dates = [
         'start_date',
         'end_date',
@@ -26,11 +26,13 @@ class Milestone extends Model
     ];
 
     //Relations
-    public function project () {
+    public function project()
+    {
         return $this->belongsTo(Project::class);
     }
 
-    public function bugs () {
+    public function bugs()
+    {
         return $this->hasMany(Bug::class);
     }
 }

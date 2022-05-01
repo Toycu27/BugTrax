@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 
 class ProjectRequest extends FormRequest
@@ -17,7 +17,7 @@ class ProjectRequest extends FormRequest
     public function authorize(Request $request)
     {
         $user_role = auth()->user()->role;
-        
+
         $perms = [
             'Admin' => ['GET', 'POST', 'PATCH', 'DELETE'],
             'Manager' => ['GET', 'POST', 'PATCH', 'DELETE'],
@@ -43,7 +43,7 @@ class ProjectRequest extends FormRequest
             case 'GET':
                 return [
                     'title' => ['string', 'max:255'],
-                    'desc' =>  ['string', 'max:255'],
+                    'desc' => ['string', 'max:255'],
                 ];
             case 'POST':
                 return [
@@ -62,15 +62,15 @@ class ProjectRequest extends FormRequest
 
     /**
      * Throw exception if validation failes
-     * 
+     *
      * @return void
      */
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'success'   => false,
-            'message'   => 'Validation errors',
-            'errors'      => $validator->errors()
+            'success' => false,
+            'message' => 'Validation errors',
+            'errors' => $validator->errors(),
         ]));
     }
 }
