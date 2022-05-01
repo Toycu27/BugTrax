@@ -50,16 +50,16 @@ class MilestoneRequest extends FormRequest
                     'project_id' => ['required', 'integer', 'exists:projects,id'],
                     'title' => ['required', 'string', 'max:255'],
                     'desc' => ['required', 'string', 'max:255'],
-                    'start_date' => ['date'],
-                    'end_date' => ['date'],
+                    'start_date' => ['date', 'nullable'],
+                    'end_date' => ['date', 'nullable'],
                 ];
             case 'PATCH':
                 return [
                     'project_id' => ['integer', 'exists:projects,id'],
                     'title' => ['string', 'max:255'],
                     'desc' => ['string', 'max:255'],
-                    'start_date' => ['date'],
-                    'end_date' => ['date'],
+                    'start_date' => ['date', 'nullable'],
+                    'end_date' => ['date', 'nullable'],
                 ];
             case 'DELETE':
                 return [];
