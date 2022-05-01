@@ -22,6 +22,12 @@ class Project extends Model
         'updated_at',
         'deleted_at',
     ];
+    
+    protected $casts = [
+        'created_at'  => 'datetime:Y-m-d\TH:i',
+        'updated_at' => 'datetime:Y-m-d\TH:i',
+        'deleted_at' => 'datetime:Y-m-d\TH:i',
+    ];
 
     public function milestones()
     {
@@ -33,5 +39,4 @@ class Project extends Model
     {
         return $this->hasMany(Bug::class);
     }
-
 }

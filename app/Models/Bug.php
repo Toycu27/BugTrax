@@ -27,6 +27,13 @@ class Bug extends Model
         'deleted_at',
     ];
 
+    protected $casts = [
+        'end_date' => 'datetime:Y-m-d\TH:i',
+        'created_at' => 'datetime:Y-m-d\TH:i',
+        'updated_at' => 'datetime:Y-m-d\TH:i',
+        'deleted_at' => 'datetime:Y-m-d\TH:i',
+    ];
+
     //Relations
     public function project()
     {

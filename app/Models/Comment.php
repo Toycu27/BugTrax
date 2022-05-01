@@ -19,6 +19,11 @@ class Comment extends Model
         'updated_at',
     ];
 
+    protected $casts = [
+        'created_at'  => 'datetime:Y-m-d\TH:i',
+        'updated_at' => 'datetime:Y-m-d\TH:i',
+    ];
+
     //Relations
     public function user()
     {
