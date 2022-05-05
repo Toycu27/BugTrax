@@ -42,6 +42,7 @@ class MilestoneRequest extends FormRequest
         switch ($request->method()) {
             case 'GET':
                 return [
+                    'project_id' => ['integer', 'exists:projects,id'],
                     'title' => ['string', 'max:255'],
                     'desc' => ['string', 'max:255'],
                 ];

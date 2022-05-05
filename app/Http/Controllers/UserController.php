@@ -18,17 +18,20 @@ class UserController extends Controller
 
     public function index(UserRequest $request): JsonResponse
     {
-        $withArr = $request->with ? explode(',', $request->with) : [];
-
         $users = User::latest('id');
+
         if ($request->name ?? false) $users->where('name', 'like', '%' . $request->name . '%');
-        
         if ($request->email ?? false) $users->where('email', '=', $request->email);
         
-        return response()->json(
-            $users->with($withArr)->paginate(10)->withQueryString(),
+        if ($request->with ?? false) $users->with(explode(',', $request->with));
+
+        if ($request->paginate ?? false) return response()->json(
+            $users->paginate($request->paginate)->withQueryString(),
             200
         );
+        else return response()->json([
+            'data' => $users->get()
+        ], 200);
     }
 
     public function update(UserRequest $request, User $user): JsonResponse

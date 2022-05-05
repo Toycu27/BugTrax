@@ -17,12 +17,17 @@ class CommentController extends Controller
 
     public function index(CommentRequest $request): JsonResponse
     {
-        $withArr = $request->with ? explode(',', $request->with) : [];
+        $comments = Comment::latest('id');
 
-        return response()->json(
-            Comment::latest('id')->with($withArr)->paginate(10)->withQueryString(),
+        if ($request->with ?? false) $comments->with(explode(',', $request->with));
+
+        if ($request->paginate ?? false) return response()->json(
+            $comments->paginate($request->paginate)->withQueryString(),
             200
         );
+        else return response()->json([
+            'data' => $comments->get()
+        ], 200);
     }
 
     public function store(CommentRequest $request): JsonResponse

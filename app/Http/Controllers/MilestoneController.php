@@ -18,17 +18,21 @@ class MilestoneController extends Controller
 
     public function index(MilestoneRequest $request): JsonResponse
     {
-        $withArr = $request->with ? explode(',', $request->with) : [];
-
         $milestones = Milestone::latest('id');
-        if ($request->title ?? false) $milestones->where('title', 'like', '%' . $request->title . '%');
         
+        if ($request->project_id ?? false) $milestones->where('project_id', '=', $request->project_id);
+        if ($request->title ?? false) $milestones->where('title', 'like', '%' . $request->title . '%');
         if ($request->desc ?? false) $milestones->where('desc', 'like', '%' . $request->desc . '%');
         
-        return response()->json(
-            $milestones->with($withArr)->paginate(10)->withQueryString(),
+        if ($request->with ?? false) $milestones->with(explode(',', $request->with));
+
+        if ($request->paginate ?? false) return response()->json(
+            $milestones->paginate($request->paginate)->withQueryString(),
             200
         );
+        else return response()->json([
+            'data' => $milestones->get()
+        ], 200);
     }
 
     public function store(MilestoneRequest $request): JsonResponse

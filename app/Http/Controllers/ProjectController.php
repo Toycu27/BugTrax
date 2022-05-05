@@ -18,17 +18,20 @@ class ProjectController extends Controller
 
     public function index(ProjectRequest $request): JsonResponse
     {
-        $withArr = $request->with ? explode(',', $request->with) : [];
-
         $projects = Project::latest('id');
-        if ($request->title ?? false) $projects->where('title', 'lik', '%' . $request->title . '%');
         
+        if ($request->title ?? false) $projects->where('title', 'lik', '%' . $request->title . '%');
         if ($request->desc ?? false) $projects->where('desc', 'like', '%' . $request->desc . '%');
         
-        return response()->json(
-            $projects->with($withArr)->paginate(10)->withQueryString(),
+        if ($request->with ?? false) $projects->with(explode(',', $request->with));
+
+        if ($request->paginate ?? false) return response()->json(
+            $projects->paginate($request->paginate)->withQueryString(),
             200
         );
+        else return response()->json([
+            'data' => $projects->get()
+        ], 200);
     }
 
     public function store(ProjectRequest $request): JsonResponse
