@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CommentRequest;
+use App\Http\Traits\JsonResponseTrait;
 use App\Models\Comment;
 use Illuminate\Http\JsonResponse;
 
@@ -55,7 +56,7 @@ class CommentController extends Controller
         ], 200);
     }
 
-    public function delete(CommentRequest $request, Comment $comment): JsonResponse
+    public function destroy(CommentRequest $request, Comment $comment): JsonResponse
     {
         $comment->destroy($comment->id);
 

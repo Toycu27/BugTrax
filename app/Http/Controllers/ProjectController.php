@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
+use App\Http\Traits\JsonResponseTrait;
 use App\Models\Project;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
+
 class ProjectController extends Controller
 {
+    use JsonResponseTrait;
+
     public function show(ProjectRequest $request, Project $project): JsonResponse
     {
         $withArr = $request->with ? explode(',', $request->with) : [];
@@ -20,7 +24,7 @@ class ProjectController extends Controller
     {
         $projects = Project::latest('id');
         
-        if ($request->title ?? false) $projects->where('title', 'lik', '%' . $request->title . '%');
+        if ($request->title ?? false) $projects->where('title', 'like', '%' . $request->title . '%');
         if ($request->desc ?? false) $projects->where('desc', 'like', '%' . $request->desc . '%');
         
         if ($request->with ?? false) $projects->with(explode(',', $request->with));
@@ -60,7 +64,7 @@ class ProjectController extends Controller
         ], 200);
     }
 
-    public function delete(ProjectRequest $request, Project $project): JsonResponse
+    public function destroy(ProjectRequest $request, Project $project): JsonResponse
     {
         $project->destroy($project->id);
 

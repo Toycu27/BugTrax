@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BugRequest;
+use App\Http\Traits\JsonResponseTrait;
 use App\Models\Bug;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
@@ -68,7 +69,7 @@ class BugController extends Controller
         ], 200);
     }
 
-    public function delete(BugRequest $request, Bug $bug): JsonResponse
+    public function destroy(BugRequest $request, Bug $bug): JsonResponse
     {
         $bug->destroy($bug->id);
 

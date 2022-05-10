@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Http\Traits\JsonResponseTrait;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -48,7 +49,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function delete(UserRequest $request, User $user): JsonResponse
+    public function destroy(UserRequest $request, User $user): JsonResponse
     {
         $user->destroy($user->id);
 

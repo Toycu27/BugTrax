@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MilestoneRequest;
+use App\Http\Traits\JsonResponseTrait;
 use App\Models\Milestone;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
@@ -61,7 +62,7 @@ class MilestoneController extends Controller
         ], 200);
     }
 
-    public function delete(MilestoneRequest $request, Milestone $milestone): JsonResponse
+    public function destroy(MilestoneRequest $request, Milestone $milestone): JsonResponse
     {
         $milestone->destroy($milestone->id);
 

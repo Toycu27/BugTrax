@@ -32,17 +32,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Project Routes
     Route::resource('projects', ProjectController::class)
-        ->only('index', 'show', 'store', 'update', 'delete');
+        ->only('index', 'show', 'store', 'update', 'destroy');
 
     //Milestone Routes
     Route::resource('milestones', MilestoneController::class)
-        ->only('index', 'show', 'store', 'update', 'delete');
+        ->only('index', 'show', 'store', 'update', 'destroy');
 
     //Bug Routes
     Route::resource('bugs', BugController::class)
-        ->only('index', 'show', 'store', 'update', 'delete');
+        ->only('index', 'show', 'store', 'update', 'destroy');
 
     //Comment Routes
     Route::resource('comments', CommentController::class)
-        ->only('store', 'update', 'delete');
+        ->only('store', 'update', 'destroy');
 });
