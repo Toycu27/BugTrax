@@ -10,12 +10,13 @@ use Illuminate\Support\Str;
 
 class BugController extends Controller
 {
-
+    use JsonResponseTrait;
+    
     public function show(BugRequest $request, Bug $bug): JsonResponse
     {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
-        return response()->json($bug->load($withArr), 200);
+        return $this->simpleResponse(true, null, $bug->load($withArr));
     }
 
     public function index(BugRequest $request): JsonResponse
@@ -32,13 +33,10 @@ class BugController extends Controller
         
         if ($request->with ?? false) $bugs->with(explode(',', $request->with));
 
-        if ($request->paginate ?? false) return response()->json(
-            $bugs->paginate($request->paginate)->withQueryString(),
-            200
-        );
-        else return response()->json([
-            'data' => $bugs->get()
-        ], 200);
+        if ($request->paginate ?? false) 
+            return $this->ResponseWithPagination(true, null, $bugs->paginate($request->paginate)->withQueryString());
+        else 
+            return $this->simpleResponse(true, null, $bugs->get());
     }
 
     public function store(BugRequest $request): JsonResponse
@@ -47,36 +45,24 @@ class BugController extends Controller
         $bug->fill($request->all());
         $bug->slug = Str::slug($bug->title);
         $bug->created_by = auth()->user()->id;
-        $bug->save();
+        $success = $bug->save();
 
-        return response()->json([
-            'success' => true,
-            'data' => $bug,
-            'message' => 'Bug has been created.',
-        ], 201);
+        return $this->simpleResponse($success, 'Bug has been created.', $bug);
     }
 
     public function update(BugRequest $request, Bug $bug): JsonResponse
     {
         $bug->slug = Str::slug($request->title);
         $bug->modified_by = auth()->user()->id;
-        $bug->update($request->all());
+        $success = $bug->update($request->all());
 
-        return response()->json([
-            'success' => true,
-            'data' => $bug,
-            'message' => 'Bug has been updated.',
-        ], 200);
+        return $this->simpleResponse($success, 'Bug has been updated.', $bug);
     }
 
     public function destroy(BugRequest $request, Bug $bug): JsonResponse
     {
         $bug->destroy($bug->id);
 
-        return response()->json([
-            'success' => true,
-            'data' => null,
-            'message' => 'Bug has been deleted.',
-        ], 204);
+        return $this->simpleResponse(true, 'Bug has been deleted.');
     }
 }

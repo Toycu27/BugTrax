@@ -9,11 +9,13 @@ use Illuminate\Http\JsonResponse;
 
 class CommentController extends Controller
 {
+    use JsonResponseTrait;
+
     public function show(CommentRequest $request, Comment $comment): JsonResponse
     {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
-        return response()->json($comment->load($withArr), 200);
+        return $this->simpleResponse(true, null, $comment->load($withArr));
     }
 
     public function index(CommentRequest $request): JsonResponse
@@ -22,13 +24,10 @@ class CommentController extends Controller
 
         if ($request->with ?? false) $comments->with(explode(',', $request->with));
 
-        if ($request->paginate ?? false) return response()->json(
-            $comments->paginate($request->paginate)->withQueryString(),
-            200
-        );
-        else return response()->json([
-            'data' => $comments->get()
-        ], 200);
+        if ($request->paginate ?? false) 
+            return $this->ResponseWithPagination(true, null, $comments->paginate($request->paginate)->withQueryString());
+        else 
+            return $this->simpleResponse(true, null, $comments->get());
     }
 
     public function store(CommentRequest $request): JsonResponse
@@ -36,34 +35,22 @@ class CommentController extends Controller
         $comment = new Comment();
         $comment->fill($request->all());
         $comment->user_id = 1;
-        $comment->save();
+        $success = $comment->save();
 
-        return response()->json([
-            'success' => true,
-            'data' => $comment,
-            'message' => 'Comment has been created.',
-        ], 201);
+        return $this->simpleResponse($success, 'Comment has been created.', $comment);
     }
 
     public function update(CommentRequest $request, Comment $comment): JsonResponse
     {
-        $comment->update($request->all());
+        $success = $comment->update($request->all());
 
-        return response()->json([
-            'success' => true,
-            'data' => $comment,
-            'message' => 'Comment has been updated.',
-        ], 200);
+        return $this->simpleResponse($success, 'Comment has been updated.', $comment);
     }
 
     public function destroy(CommentRequest $request, Comment $comment): JsonResponse
     {
         $comment->destroy($comment->id);
 
-        return response()->json([
-            'success' => true,
-            'data' => null,
-            'message' => 'Comment has been deleted.',
-        ], 204);
+        return $this->simpleResponse(true, 'Comment has been deleted.');
     }
 }

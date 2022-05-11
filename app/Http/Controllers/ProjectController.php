@@ -17,7 +17,7 @@ class ProjectController extends Controller
     {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
-        return response()->json($project->load($withArr), 200);
+        return $this->simpleResponse(true, null, $project->load($withArr));
     }
 
     public function index(ProjectRequest $request): JsonResponse
@@ -29,13 +29,10 @@ class ProjectController extends Controller
         
         if ($request->with ?? false) $projects->with(explode(',', $request->with));
 
-        if ($request->paginate ?? false) return response()->json(
-            $projects->paginate($request->paginate)->withQueryString(),
-            200
-        );
-        else return response()->json([
-            'data' => $projects->get()
-        ], 200);
+        if ($request->paginate ?? false) 
+            return $this->ResponseWithPagination(true, null, $projects->paginate($request->paginate)->withQueryString());
+        else 
+            return $this->simpleResponse(true, null, $projects->get());
     }
 
     public function store(ProjectRequest $request): JsonResponse
@@ -43,35 +40,23 @@ class ProjectController extends Controller
         $project = new Project();
         $project->fill($request->all());
         $project->slug = Str::slug($project->title);
-        $project->save();
+        $success = $project->save();
 
-        return response()->json([
-            'success' => true,
-            'data' => $project,
-            'message' => 'Project has been created.',
-        ], 201);
+        return $this->simpleResponse($success, 'Project has been created.', $project);
     }
 
     public function update(ProjectRequest $request, Project $project): JsonResponse
     {
         $project->slug = Str::slug($request->title);
-        $project->update($request->all());
+        $success = $project->update($request->all());
 
-        return response()->json([
-            'success' => true,
-            'data' => $project,
-            'message' => 'Project has been updated.',
-        ], 200);
+        return $this->simpleResponse($success, 'Project has been updated.', $project);
     }
 
     public function destroy(ProjectRequest $request, Project $project): JsonResponse
     {
         $project->destroy($project->id);
 
-        return response()->json([
-            'success' => true,
-            'data' => null,
-            'message' => 'Project has been deleted.',
-        ], 204);
+        return $this->simpleResponse(true, 'Project has been deleted.');
     }
 }

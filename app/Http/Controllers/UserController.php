@@ -10,11 +10,13 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    use JsonResponseTrait;
+
     public function show(UserRequest $request, User $user): JsonResponse
     {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
-        return response()->json($user->load($withArr), 200);
+        return $this->simpleResponse(true, null, $user->load($withArr));
     }
 
     public function index(UserRequest $request): JsonResponse
@@ -26,13 +28,10 @@ class UserController extends Controller
         
         if ($request->with ?? false) $users->with(explode(',', $request->with));
 
-        if ($request->paginate ?? false) return response()->json(
-            $users->paginate($request->paginate)->withQueryString(),
-            200
-        );
-        else return response()->json([
-            'data' => $users->get()
-        ], 200);
+        if ($request->paginate ?? false) 
+            return $this->ResponseWithPagination(true, null, $users->paginate($request->paginate)->withQueryString());
+        else 
+            return $this->simpleResponse(true, null, $users->get());
     }
 
     public function update(UserRequest $request, User $user): JsonResponse
@@ -40,24 +39,15 @@ class UserController extends Controller
         $loggedInUser = $request->user();
         $loggedInUser->name = $request->name;
         $loggedInUser->password = Hash::make($request->password);
-        $loggedInUser->update();
+        $success = $loggedInUser->update();
 
-        return response()->json([
-            'success' => true,
-            'data' => $loggedInUser,
-            'message' => 'Your Account information has been updated.',
-        ], 200);
+        return $this->simpleResponse($success, 'Your Account information has been updated.', $loggedInUser);
     }
 
     public function destroy(UserRequest $request, User $user): JsonResponse
     {
         $user->destroy($user->id);
 
-        return response()->json(null, 204);
-        return response()->json([
-            'success' => true,
-            'data' => null,
-            'message' => 'Your Account has been deleted.',
-        ], 204);
+        return $this->simpleResponse(true, 'Your Account has been deleted.');
     }
 }

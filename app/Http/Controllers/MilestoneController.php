@@ -10,11 +10,13 @@ use Illuminate\Support\Str;
 
 class MilestoneController extends Controller
 {
+    use JsonResponseTrait;
+
     public function show(MilestoneRequest $request, Milestone $milestone): JsonResponse
     {
         $withArr = $request->with ? explode(',', $request->with) : [];
 
-        return response()->json($milestone->load($withArr), 200);
+        return $this->simpleResponse(true, null, $milestone->load($withArr));
     }
 
     public function index(MilestoneRequest $request): JsonResponse
@@ -27,13 +29,10 @@ class MilestoneController extends Controller
         
         if ($request->with ?? false) $milestones->with(explode(',', $request->with));
 
-        if ($request->paginate ?? false) return response()->json(
-            $milestones->paginate($request->paginate)->withQueryString(),
-            200
-        );
-        else return response()->json([
-            'data' => $milestones->get()
-        ], 200);
+        if ($request->paginate ?? false) 
+            return $this->ResponseWithPagination(true, null, $milestones->paginate($request->paginate)->withQueryString());
+        else 
+            return $this->simpleResponse(true, null, $milestones->get());
     }
 
     public function store(MilestoneRequest $request): JsonResponse
@@ -41,35 +40,23 @@ class MilestoneController extends Controller
         $milestone = new Milestone();
         $milestone->fill($request->all());
         $milestone->slug = Str::slug($milestone->title);
-        $milestone->save();
+        $success = $milestone->save();
 
-        return response()->json([
-            'success' => true,
-            'data' => $milestone,
-            'message' => 'Milestone has been created.',
-        ], 201);
+        return $this->simpleResponse($success, 'Milestone has been created.', $milestone);
     }
 
     public function update(MilestoneRequest $request, Milestone $milestone): JsonResponse
     {
         $milestone->slug = Str::slug($request->title);
-        $milestone->update($request->all());
+        $success = $milestone->update($request->all());
 
-        return response()->json([
-            'success' => true,
-            'data' => $milestone,
-            'message' => 'Milestone has been updated.',
-        ], 200);
+        return $this->simpleResponse($success, 'Milestone has been updated.', $milestone);
     }
 
     public function destroy(MilestoneRequest $request, Milestone $milestone): JsonResponse
     {
         $milestone->destroy($milestone->id);
 
-        return response()->json([
-            'success' => true,
-            'data' => null,
-            'message' => 'Milestone has been deleted.',
-        ], 204);
+        return $this->simpleResponse(true, 'Milestone has been deleted.');
     }
 }
