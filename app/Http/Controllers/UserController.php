@@ -38,7 +38,9 @@ class UserController extends Controller
     {
         $loggedInUser = $request->user();
         $loggedInUser->name = $request->name;
-        $loggedInUser->password = Hash::make($request->password);
+        if ($request->password) {
+            $loggedInUser->password = Hash::make($request->password);
+        }
         $success = $loggedInUser->update();
 
         return $this->simpleResponse($success, 'Your Account information has been updated.', $loggedInUser);

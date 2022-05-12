@@ -10,7 +10,7 @@ trait JsonResponseTrait
     public function simpleResponse (bool $success, string $message = null, $data = null, $errors = null, $httpCode = 200): JsonResponse
     {
         if ($success === false) {
-            return $this->errorResponse("Unknwon Internal Server Error");
+            return $this->errorResponse(null, $errors);
         }
 
         $responseArr = [
@@ -26,7 +26,7 @@ trait JsonResponseTrait
     public function ResponseWithPagination (bool $success, string $message = null, $data = null, $errors = null, $httpCode = 200): JsonResponse
     {
         if ($success === false) {
-            return $this->errorResponse("Unknwon Internal Server Error");
+            return $this->errorResponse(null, $errors);
         }
 
         $data = $data->toArray();
@@ -37,7 +37,9 @@ trait JsonResponseTrait
         return response()->json($data, $httpCode);
     }
 
-    public function errorResponse (string $message = null, $errors = null): JsonResponse {
+    public function errorResponse ($message = null, $errors = null): JsonResponse {
+        if ($errors === null) $message = "Unknwon Internal Server Error";
+
         $responseArr = [
             'success' => false,
             'data' => null,

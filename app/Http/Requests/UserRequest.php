@@ -59,9 +59,9 @@ class UserRequest extends FormRequest
                     'name' => ['string', 'max:255'],
                     'email' => ['email', 'unique:users', 'max:255'],
                     'password_current' => ['current_password'],
-                    'password' => ['string', 'max:255'],
+                    'password' => ['nullable', 'string', 'max:255'],
                     'password_confirm' => ['same:password'],
-                    'role' => ['string', 'max:32'],
+                    'role' => ['nullable', 'string', 'max:32'],
                 ];
             case 'DELETE':
                 return [];
