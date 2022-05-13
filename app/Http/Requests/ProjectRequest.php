@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\JsonResponseTrait;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class ProjectRequest extends FormRequest
@@ -71,7 +72,19 @@ class ProjectRequest extends FormRequest
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
-            $this->simpleResponse(false, null, null, $validator->errors())
+            $this->validationResponse($validator->errors())
+        );
+    }
+
+    /**
+     * Handle a failed authorization attempt.
+     *
+     * @return void
+     */
+    protected function failedAuthorization()
+    {
+        throw new HttpResponseException(
+            $this->authResponse()
         );
     }
 }

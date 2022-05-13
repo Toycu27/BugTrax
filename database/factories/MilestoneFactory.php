@@ -18,12 +18,12 @@ class MilestoneFactory extends Factory
      */
     public function definition()
     {
-        $title = $this->faker->sentence();
+        $title = $this->faker->sentence(4);
         return [
             'project_id' => Project::factory(),
             'title' => $title,
             'slug' => Str::slug($title),
-            'desc' => $this->faker->paragraph(),
+            'desc' => $this->faker->paragraph(2),
         ];
     }
 }

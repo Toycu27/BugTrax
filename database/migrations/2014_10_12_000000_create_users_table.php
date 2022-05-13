@@ -20,8 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['Admin', 'Manager', 'Member', 'Client'])->default('Member');
-            $table->string('api_token', 80)->unique()->nullable()->default(null);
-            $table->rememberToken();
+            $table->string('avatar_path')->nullable();
             $table->timestamps();
         });
     }

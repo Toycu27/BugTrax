@@ -104,7 +104,19 @@ class BugRequest extends FormRequest
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
-            $this->simpleResponse(false, null, null, $validator->errors())
+            $this->validationResponse($validator->errors())
+        );
+    }
+
+    /**
+     * Handle a failed authorization attempt.
+     *
+     * @return void
+     */
+    protected function failedAuthorization()
+    {
+        throw new HttpResponseException(
+            $this->authResponse()
         );
     }
 }

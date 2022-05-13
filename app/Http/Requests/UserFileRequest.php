@@ -8,7 +8,7 @@ use App\Http\Traits\JsonResponseTrait;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 
-class UserRequest extends FormRequest
+class UserFileRequest extends FormRequest
 {
     use JsonResponseTrait;
 
@@ -43,28 +43,10 @@ class UserRequest extends FormRequest
     public function rules(Request $request)
     {
         switch ($request->method()) {
-            case 'GET':
-                return [
-                    'name' => ['string', 'max:255'],
-                    'email' => ['email', 'max:255'],
-                    'role' => ['string', 'max:32'],
-                ];
             case 'POST':
                 return [
-                    'name' => ['required', 'string', 'max:255'],
-                    'email' => ['required', 'email', 'unique:users', 'max:255'],
+                    'avatar' => ['nullable', 'file', 'image', 'max:512'],
                 ];
-            case 'PATCH':
-                return [
-                    'name' => ['string', 'max:255'],
-                    'email' => ['email', 'unique:users', 'max:255'],
-                    'password_current' => ['current_password'],
-                    'password' => ['nullable', 'string', 'max:255'],
-                    'password_confirm' => ['same:password'],
-                    'role' => ['nullable', 'string', 'max:32'],
-                ];
-            case 'DELETE':
-                return [];
         }
     }
 

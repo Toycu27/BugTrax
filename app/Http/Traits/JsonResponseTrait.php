@@ -37,6 +37,28 @@ trait JsonResponseTrait
         return response()->json($data, $httpCode);
     }
 
+    public function validationResponse($errors = null) {
+        $responseArr = [
+            'success' => false,
+            'data' => null,
+            'errors' => $errors,
+            'message' => null,
+        ];
+
+        return response()->json($responseArr, 400);
+    }
+
+    public function authResponse() {
+        $responseArr = [
+            'success' => false,
+            'data' => null,
+            'errors' => null,
+            'message' => 'You dont have permission for this action!',
+        ];
+
+        return response()->json($responseArr, 403);
+    }
+
     public function errorResponse ($message = null, $errors = null): JsonResponse {
         if ($errors === null) $message = "Unknwon Internal Server Error";
 

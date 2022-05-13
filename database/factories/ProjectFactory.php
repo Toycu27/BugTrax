@@ -22,7 +22,7 @@ class ProjectFactory extends Factory
         return [
             'title' => $title,
             'slug' => Str::slug($title),
-            'desc' => $this->faker->paragraph(),
+            'desc' => $this->faker->paragraph(1),
         ];
     }
 
