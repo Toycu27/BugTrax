@@ -38,5 +38,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Comment Routes
     Route::resource('comments', CommentController::class)
-        ->only('store', 'update', 'destroy');
+        ->only('index', 'show', 'store', 'update', 'destroy');
 });

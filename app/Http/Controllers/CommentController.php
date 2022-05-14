@@ -22,6 +22,8 @@ class CommentController extends Controller
     {
         $comments = Comment::latest('id');
 
+        if ($request->bug_id ?? false) $comments->where('bug_id', '=', $request->bug_id);
+
         if ($request->with ?? false) $comments->with(explode(',', $request->with));
 
         if ($request->paginate ?? false) 
@@ -34,7 +36,7 @@ class CommentController extends Controller
     {
         $comment = new Comment();
         $comment->fill($request->all());
-        $comment->user_id = 1;
+        $comment->user_id = auth()->user()->id;
         $success = $comment->save();
 
         return $this->simpleResponse($success, 'Comment has been created.', $comment);

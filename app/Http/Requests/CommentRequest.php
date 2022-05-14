@@ -43,6 +43,11 @@ class CommentRequest extends FormRequest
     public function rules(Request $request)
     {
         switch ($request->method()) {
+            case 'GET':
+                return [
+                    'bug_id' => ['integer', 'exists:bugs,id'],
+                    'message' => ['string', 'min:3'],
+                ];
             case 'POST':
                 return [
                     'bug_id' => ['required', 'integer', 'exists:bugs,id'],
