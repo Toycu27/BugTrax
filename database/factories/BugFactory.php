@@ -21,6 +21,12 @@ class BugFactory extends Factory
     public function definition()
     {
         $title = $this->faker->sentence();
+        $status = ['New', 'Progress', 'Freeze', 'Testing', 'Solved'];
+        $priority = ['Immediate','High','Normal','Low'];
+        $difficulty = ['Easy','Normal','Hard','Unknown'];
+        $device_type = ['Desktop','Tablet','Mobile'];
+        $device_os = ['Windows','Mac','Linux'];
+
         return [
             'project_id' => Project::factory(),
             'milestone_id' => Milestone::factory(),
@@ -28,6 +34,11 @@ class BugFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'desc' => $this->faker->paragraph(),
+            'status' => $status[$this->faker->numberBetween(0, 4)],
+            'priority' => $priority[$this->faker->numberBetween(0, 3)],
+            'difficulty' => $difficulty[$this->faker->numberBetween(0, 3)],
+            'device_type' => $device_type[$this->faker->numberBetween(0, 2)],
+            'device_os' => $device_os[$this->faker->numberBetween(0, 2)],
         ];
     }
 }

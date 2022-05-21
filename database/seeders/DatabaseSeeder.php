@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
+use Faker\Factory AS Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -31,27 +32,51 @@ class DatabaseSeeder extends Seeder
         Schema::enableForeignKeyConstraints();
 
         //Seed Database with Faker
-        $users = User::factory(3)->create();
-        $projects = Project::factory(2)->create();
-        $milestones_a = Milestone::factory(2)->create(['project_id' => $projects[0]]);
-        $milestones_b = Milestone::factory(2)->create(['project_id' => $projects[1]]);
-        $bugs_a = Bug::factory(5)->create([
-            'project_id' => $projects[0],
-            'milestone_id' => $milestones_a[0],
-            'created_by' => $users[0],
-        ]);
-        $bugs_b = Bug::factory(5)->create([
-            'project_id' => $projects[1],
-            'milestone_id' => $milestones_b[0],
-            'created_by' => $users[1],
-        ]);
-        Comment::factory(5)->create([
-            'user_id' => $users[0],
-            'bug_id' => $bugs_a[0],
-        ]);
-        Comment::factory(5)->create([
-            'user_id' => $users[1],
-            'bug_id' => $bugs_b[0],
-        ]);
+        $faker = Faker::create();
+
+        $settings = (object) [
+            'usersAmount' => 7,
+            'projectsAmount' => 3,
+        ];
+
+        //Seeds Users, Projects and Milestones
+        $users = User::factory($settings->usersAmount)->create();
+        $projects = Project::factory($settings->projectsAmount)->create();
+        $milestones_0 = Milestone::factory(2)->create(['project_id' => $projects[0]]);
+        $milestones_1 = Milestone::factory(4)->create(['project_id' => $projects[1]]);
+        $milestones_2 = Milestone::factory(3)->create(['project_id' => $projects[2]]);
+        $milestones = $milestones_0->merge($milestones_1)->merge($milestones_2);
+
+        //Seed Bugs
+        $bugs = collect();
+        foreach ($milestones AS $milestone) {
+            $rounds = $faker->numberBetween(5, 8);
+            for ($i = 0; $i < $rounds; $i++) {
+                $bugs->add(Bug::factory(1)->create([
+                    'project_id' => $milestone->project_id,
+                    'milestone_id' => $milestone,
+                    'assigned_to' => $users[$faker->numberBetween(0, $settings->usersAmount - 1)],
+                    'created_by' => $users[$faker->numberBetween(0, $settings->usersAmount - 1)],
+                    'created_at' => $faker->dateTimeBetween(
+                        $milestone->created_at, 
+                        $milestone->start_date
+                    ),
+                    'end_date' => $milestone->end_date,
+                ])[0]);
+            }
+        }
+
+        //Seed Comments
+        foreach ($bugs AS $bug) {
+            $rounds = $faker->numberBetween(0, 4);
+            for ($i = 0; $i < $rounds; $i++) {
+                Comment::factory(1)->create([
+                    'user_id' => $users[$faker->numberBetween(0, $settings->usersAmount - 1)],
+                    'bug_id' => $bug,
+                    'created_at' => $faker->dateTimeBetween($bug->created_at, 'now'),
+                ]);
+            }
+        }
+
     }
 }

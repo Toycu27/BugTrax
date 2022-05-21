@@ -24,9 +24,8 @@ return new class extends Migration
             $table->foreignId('modified_by')->nullable();
             $table->foreignId('assigned_to')->nullable();
             $table->boolean('published')->default(0);
-            $table->enum('status', ['New', 'Progress', 'Freeze', 'Testet', 'Solved'])->default('New');
+            $table->enum('status', ['New', 'Progress', 'Freeze', 'Testing', 'Solved'])->default('New');
             $table->enum('priority', ['Immediate', 'High', 'Normal', 'Low']);
-            $table->tinyInteger('progress')->default(0);
             $table->enum('difficulty', ['Easy', 'Normal', 'Hard', 'Unknown']);
             $table->string('title');
             $table->string('slug')->unique();

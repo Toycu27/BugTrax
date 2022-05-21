@@ -23,6 +23,7 @@ class ProjectFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'desc' => $this->faker->paragraph(1),
+            'created_at' => $this->faker->dateTimeBetween('-2 month', '-1 month'),
         ];
     }
 
