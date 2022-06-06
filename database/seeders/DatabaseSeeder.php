@@ -77,6 +77,26 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
-
+        foreach ($milestones AS $milestone) {
+            $rounds = $faker->numberBetween(0, 3);
+            for ($i = 0; $i < $rounds; $i++) {
+                Comment::factory(1)->create([
+                    'user_id' => $users[$faker->numberBetween(0, $settings->usersAmount - 1)],
+                    'milestone_id' => $milestone,
+                    'created_at' => $faker->dateTimeBetween($milestone->created_at, 'now'),
+                ]);
+            }
+        }
+        foreach ($projects AS $project) {
+            $rounds = $faker->numberBetween(0, 2);
+            for ($i = 0; $i < $rounds; $i++) {
+                Comment::factory(1)->create([
+                    'user_id' => $users[$faker->numberBetween(0, $settings->usersAmount - 1)],
+                    'project_id' => $project,
+                    'created_at' => $faker->dateTimeBetween($project->created_at, 'now'),
+                ]);
+            }
+        }
+    
     }
 }

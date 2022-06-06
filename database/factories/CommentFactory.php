@@ -20,7 +20,9 @@ class CommentFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'bug_id' => Bug::factory(),
+            'bug_id' => null,
+            'milestone_id' => null,
+            'project_id' => null,
             'message' => $this->faker->paragraph($this->faker->numberBetween(1, 3)),
             'created_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
         ];

@@ -23,6 +23,8 @@ class CommentController extends Controller
         $comments = Comment::latest('id');
 
         if ($request->bug_id ?? false) $comments->where('bug_id', '=', $request->bug_id);
+        if ($request->milestone_id ?? false) $comments->where('milestone_id', '=', $request->milestone_id);
+        if ($request->project_id ?? false) $comments->where('project_id', '=', $request->project_id);
 
         if ($request->with ?? false) $comments->with(explode(',', $request->with));
 

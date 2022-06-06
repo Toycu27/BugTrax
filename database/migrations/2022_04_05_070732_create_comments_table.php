@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Bug;
+use App\Models\Milestone;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,7 +20,9 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Bug::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Bug::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Milestone::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Project::class)->nullable()->constrained()->cascadeOnDelete();
             $table->text('message');
             $table->timestamps();
         });
