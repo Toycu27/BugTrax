@@ -46,11 +46,15 @@ class CommentRequest extends FormRequest
             case 'GET':
                 return [
                     'bug_id' => ['integer', 'exists:bugs,id'],
+                    'milestone_id' => ['integer', 'exists:milestones,id'],
+                    'project_id' => ['integer', 'exists:projects,id'],
                     'message' => ['string', 'min:3'],
                 ];
             case 'POST':
                 return [
-                    'bug_id' => ['required', 'integer', 'exists:bugs,id'],
+                    'bug_id' => ['integer', 'exists:bugs,id'],
+                    'milestone_id' => ['integer', 'exists:milestones,id'],
+                    'project_id' => ['integer', 'exists:projects,id'],
                     'message' => ['required', 'string', 'min:3'],
                 ];
             case 'PATCH':

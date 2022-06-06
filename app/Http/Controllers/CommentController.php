@@ -53,6 +53,7 @@ class CommentController extends Controller
 
     public function destroy(CommentRequest $request, Comment $comment): JsonResponse
     {
+        //Only Delete if User is comment user or user is admin
         $comment->destroy($comment->id);
 
         return $this->simpleResponse(true, 'Comment has been deleted.');
