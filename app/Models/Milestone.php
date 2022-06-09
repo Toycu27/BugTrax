@@ -14,6 +14,11 @@ class Milestone extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public static $sortable = [
+        'id',
+        'end_date',
+    ];
+
     protected $with = [];
     protected $guarded = ['id'];
 

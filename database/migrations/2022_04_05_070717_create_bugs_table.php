@@ -3,6 +3,9 @@
 use App\Models\Milestone;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Status;
+use App\Models\Difficulty;
+use App\Models\Priority;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,10 +26,9 @@ return new class extends Migration
             $table->foreignIdFor(User::class, 'created_by');
             $table->foreignId('modified_by')->nullable();
             $table->foreignId('assigned_to')->nullable();
-            $table->boolean('published')->default(0);
-            $table->enum('status', ['New', 'Progress', 'Freeze', 'Testing', 'Done'])->default('New');
-            $table->enum('priority', ['High', 'Normal', 'Low']);
-            $table->enum('difficulty', ['Unknown', 'Easy', 'Normal', 'Hard']);
+            $table->foreignIdFor(Status::class)->nullable();
+            $table->foreignIdFor(Priority::class)->nullable();
+            $table->foreignIdFor(Difficulty::class)->nullable();
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('desc');

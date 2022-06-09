@@ -17,6 +17,14 @@ class Bug extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public static $sortable = [
+        'id',
+        'status_id',
+        'priority_id',
+        'difficulty_id',
+        'end_date',
+    ];
+
     protected $with = [];
     protected $guarded = ['id', 'created_by', 'modified_by'];
 
@@ -43,6 +51,21 @@ class Bug extends Model
     public function milestone()
     {
         return $this->belongsTo(Milestone::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
+
+    public function priority()
+    {
+        return $this->belongsTo(Priority::class);
+    }
+
+    public function difficulty()
+    {
+        return $this->belongsTo(Difficulty::class);
     }
 
     public function createdBy()

@@ -21,13 +21,25 @@ class BugController extends Controller
 
     public function index(BugRequest $request): JsonResponse
     {
-        $bugs = Bug::latest('id');
+        $bugs = Bug::class;
+
+        $orderCount = 0;
+        if ($request->sort ?? false) {
+            foreach($request->sort AS $field => $order) {
+                if (in_array($field, Bug::$sortable)) {
+                    if ($orderCount === 0) $bugs = Bug::orderBy($field, $order === 'ASC' ? 'ASC' : 'DESC');
+                    else $bugs->orderBy($field, $order === 'ASC' ? 'ASC' : 'DESC');
+                    $orderCount++;
+                }
+            }
+        }
+        if ($orderCount === 0) $bugs = Bug::latest('id');
 
         if ($request->project_id ?? false) $bugs->where('project_id', '=', $request->project_id);
         if ($request->milestone_id ?? false) $bugs->where('milestone_id', '=', $request->milestone_id);
         if ($request->created_by ?? false) $bugs->where('created_by', '=', $request->created_by);
         if ($request->assigned_to ?? false) $bugs->where('assigned_to', '=', $request->assigned_to);
-        if ($request->status ?? false) $bugs->where('status', '=', $request->status);
+        if ($request->status_id ?? false) $bugs->where('status_id', '=', $request->status_id);
         if ($request->title ?? false) $bugs->where('title', 'like', '%' . $request->title . '%');
         if ($request->desc ?? false) $bugs->where('desc', 'like', '%' . $request->desc . '%');
         

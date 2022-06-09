@@ -21,9 +21,6 @@ class BugFactory extends Factory
     public function definition()
     {
         $title = $this->faker->sentence();
-        $status = ['New', 'Progress', 'Freeze', 'Testing', 'Done'];
-        $priority = ['High', 'Normal', 'Low'];
-        $difficulty = ['Unknown', 'Easy', 'Normal', 'Hard'];
         $device_type = ['Desktop', 'Tablet', 'Mobile'];
         $device_os = ['Windows', 'Mac', 'Linux'];
 
@@ -34,9 +31,9 @@ class BugFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'desc' => $this->faker->paragraph(),
-            'status' => $status[$this->faker->numberBetween(0, 4)],
-            'priority' => $priority[$this->faker->numberBetween(0, 2)],
-            'difficulty' => $difficulty[$this->faker->numberBetween(0, 3)],
+            'status_id' => $this->faker->numberBetween(1, 4),
+            'priority_id' => $this->faker->numberBetween(1, 3),
+            'difficulty_id' => $this->faker->numberBetween(1, 3),
             'device_type' => $device_type[$this->faker->numberBetween(0, 2)],
             'device_os' => $device_os[$this->faker->numberBetween(0, 2)],
         ];

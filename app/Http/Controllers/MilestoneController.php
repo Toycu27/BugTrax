@@ -21,8 +21,20 @@ class MilestoneController extends Controller
 
     public function index(MilestoneRequest $request): JsonResponse
     {
-        $milestones = Milestone::latest('id');
-        
+        $milestones = Milestone::class;
+
+        $orderCount = 0;
+        if ($request->sort ?? false) {
+            foreach($request->sort AS $field => $order) {
+                if (in_array($field, Milestone::$sortable)) {
+                    if ($orderCount === 0) $milestones = Milestone::orderBy($field, $order === 'ASC' ? 'ASC' : 'DESC');
+                    else $milestones->orderBy($field, $order === 'ASC' ? 'ASC' : 'DESC');
+                    $orderCount++;
+                }
+            }
+        }
+        if ($orderCount === 0) $milestones = Milestone::latest('id');
+
         if ($request->project_id ?? false) $milestones->where('project_id', '=', $request->project_id);
         if ($request->title ?? false) $milestones->where('title', 'like', '%' . $request->title . '%');
         if ($request->desc ?? false) $milestones->where('desc', 'like', '%' . $request->desc . '%');
