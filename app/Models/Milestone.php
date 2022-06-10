@@ -17,6 +17,10 @@ class Milestone extends Model
     public static $sortable = [
         'id',
         'end_date',
+        'start_date',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     protected $with = [];

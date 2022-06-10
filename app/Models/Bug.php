@@ -23,6 +23,9 @@ class Bug extends Model
         'priority_id',
         'difficulty_id',
         'end_date',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     protected $with = [];
