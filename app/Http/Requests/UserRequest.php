@@ -51,11 +51,13 @@ class UserRequest extends FormRequest
                 ];
             case 'POST':
                 return [
+                    'timezone' => ['required', 'timezone'],
                     'name' => ['required', 'string', 'max:255'],
                     'email' => ['required', 'email', 'unique:users', 'max:255'],
                 ];
             case 'PATCH':
                 return [
+                    'timezone' => ['timezone'],
                     'name' => ['string', 'max:255'],
                     'email' => ['email', 'unique:users', 'max:255'],
                     'password_current' => ['current_password'],

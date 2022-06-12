@@ -24,7 +24,12 @@ class Milestone extends Model
     ];
 
     protected $with = [];
-    protected $guarded = ['id'];
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at', 
+        'deleted_at',
+    ];
 
     protected $dates = [
         'start_date',

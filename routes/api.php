@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
     //User Routes
     Route::post('/users/{id}/avatar', [UserController::class, 'storeAvatar']);
+    
     Route::resource('users', UserController::class)
         ->only('index', 'show', 'update');
 

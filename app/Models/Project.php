@@ -15,7 +15,12 @@ class Project extends Model
     use SoftDeletes;
 
     protected $with = [];
-    protected $guarded = ['id'];
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at', 
+        'deleted_at',
+    ];
 
     protected $dates = [
         'created_at',

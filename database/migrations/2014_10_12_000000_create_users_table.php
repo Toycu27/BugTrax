@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['Admin', 'Manager', 'Member', 'Client'])->default('Member');
             $table->string('avatar_path')->nullable();
+            $table->string('timezone')->default('Europe/Berlin');
             $table->timestamps();
         });
     }

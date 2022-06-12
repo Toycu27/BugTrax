@@ -23,10 +23,21 @@ class UserController extends Controller
 
     public function index(UserRequest $request): JsonResponse
     {
-        $users = User::latest('id');
+        $users = User::class;
+
+        $orderCount = 0;
+        if ($request->sort ?? false) {
+            foreach($request->sort AS $field => $order) {
+                if (in_array($field, User::$sortable)) {
+                    if ($orderCount === 0) $users = User::orderBy($field, $order === 'ASC' ? 'ASC' : 'DESC');
+                    else $users->orderBy($field, $order === 'ASC' ? 'ASC' : 'DESC');
+                    $orderCount++;
+                }
+            }
+        }
+        if ($orderCount === 0) $users = User::latest('id');
 
         if ($request->name ?? false) $users->where('name', 'like', '%' . $request->name . '%');
-        if ($request->email ?? false) $users->where('email', '=', $request->email);
         
         if ($request->with ?? false) $users->with(explode(',', $request->with));
 
@@ -60,22 +71,20 @@ class UserController extends Controller
     {
         $loggedInUser = $request->user();
 
-        if ($request->name) $loggedInUser->name = $request->name;
-        if ($request->password) $loggedInUser->password = Hash::make($request->password);
+        //Only allow Role Update if logged in User is Admin
+        if ($request->role && $loggedInUser->role === 'Admin') {
+            $user->role = $request->role;
 
-        if ($request->hasFile('avatar')) {
-            error_log("inside");
-            $path = Storage::putFileAs(
-                'avatars', $request->file('avatar'), $request->user()->id
-            );
-            if ($path) {
-                $loggedInUser->avatar_path = $path; 
-                error_log("path: " . $path);
-            }
+            $success = $user->update();
+            return $this->simpleResponse($success, 'User Role has been updated.', $user);
+        } else {
+            if ($request->timezone) $loggedInUser->timezone = $request->timezone;
+            if ($request->name) $loggedInUser->name = $request->name;
+            if ($request->password) $loggedInUser->password = Hash::make($request->password);
+
+            $success = $loggedInUser->update();
+            return $this->simpleResponse($success, 'Your Account information has been updated.', $loggedInUser);
         }
-
-        $success = $loggedInUser->update();
-        return $this->simpleResponse($success, 'Your Account information has been updated.', $loggedInUser);
     }
 
     public function destroy(UserRequest $request, User $user): JsonResponse

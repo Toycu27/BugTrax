@@ -12,7 +12,13 @@ class File extends Model
     use HasFactory;
 
     protected $with = [];
-    protected $guarded = ['id', 'user_id'];
+    protected $guarded = [
+        'id', 
+        'user_id',
+        'created_at',
+        'updated_at', 
+        'deleted_at',
+    ];
 
     protected $dates = [
         'created_at',

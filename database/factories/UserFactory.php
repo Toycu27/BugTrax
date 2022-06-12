@@ -17,6 +17,7 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
+            'timezone' => 'Europe/Berlin',
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => $this->faker->dateTimeBetween('-1 month', 'now'),

@@ -15,12 +15,19 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $with = [];
 
+    public static $sortable = [
+        'email_verified_at',
+        'created_at',
+        'updated_at',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
+        'timezone',
         'name',
         'email',
         'password',

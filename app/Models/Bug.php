@@ -29,7 +29,14 @@ class Bug extends Model
     ];
 
     protected $with = [];
-    protected $guarded = ['id', 'created_by', 'modified_by'];
+    protected $guarded = [
+        'id', 
+        'created_at',
+        'updated_at', 
+        'deleted_at', 
+        'created_by', 
+        'modified_by'
+    ];
 
     protected $dates = [
         'end_date',
