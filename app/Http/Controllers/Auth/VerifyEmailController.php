@@ -18,13 +18,14 @@ class VerifyEmailController extends Controller
     public function __invoke(EmailVerificationRequest $request)
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return Redirect::to($_ENV['FRONTEND_URL'] . '/login?verified=true');
+            //env('FRONTEND_URL', 'http://localhost:3000')
+            return Redirect::to(config('app.frontend_url') . '/login?verified=true');
         }
 
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
 
-        return Redirect::to($_ENV['FRONTEND_URL'] . '/login?verified=true');
+        return Redirect::to(config('app.frontend_url') . '/login?verified=true');
     }
 }
