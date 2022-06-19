@@ -16,6 +16,7 @@ update:
 	php artisan route:cache &&
 	php artisan view:cache &&
 	php artisan storage:link
+	rm -r tmpBugTrax/
 
 cache:
 	php artisan config:cache &&
