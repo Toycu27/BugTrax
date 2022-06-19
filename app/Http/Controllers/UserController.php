@@ -71,6 +71,11 @@ class UserController extends Controller
     {
         $loggedInUser = $request->user();
 
+        //Demo user is not allowed to change account information
+        if ($loggedInUser->name == 'demo') {
+            return $this->errorResponse('Demo User is not allowed to change Account information.');
+        }
+
         //Only allow Role Update if logged in User is Admin
         if ($request->role && $loggedInUser->role === 'Admin') {
             $user->role = $request->role;
@@ -81,7 +86,7 @@ class UserController extends Controller
             if ($request->timezone) $loggedInUser->timezone = $request->timezone;
             if ($request->name) $loggedInUser->name = $request->name;
             if ($request->password) $loggedInUser->password = Hash::make($request->password);
-
+            
             $success = $loggedInUser->update();
             return $this->simpleResponse($success, 'Your Account information has been updated.', $loggedInUser);
         }

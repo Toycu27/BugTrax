@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Hash;
 use Faker\Factory AS Faker;
 
 class DatabaseSeeder extends Seeder
@@ -40,6 +41,13 @@ class DatabaseSeeder extends Seeder
         ];
 
         //Seeds Users, Projects and Milestones
+        User::factory(1)->create([
+            'timezone' => 'Europe/Berlin',
+            'name' => 'demo',
+            'email' => 'demo@bugtrax.de',
+            'email_verified_at' => $faker->dateTimeBetween('-1 month', 'now'),
+            'password' => Hash::make('demo1234'),
+        ]);
         $users = User::factory($settings->usersAmount)->create();
         $projects = Project::factory($settings->projectsAmount)->create();
         $milestones_0 = Milestone::factory(2)->create(['project_id' => $projects[0]]);

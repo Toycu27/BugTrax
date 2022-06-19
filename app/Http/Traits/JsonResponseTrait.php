@@ -60,7 +60,7 @@ trait JsonResponseTrait
     }
 
     public function errorResponse ($message = null, $errors = null): JsonResponse {
-        if ($errors === null) $message = "Unknwon Internal Server Error";
+        if ($message === null) $message = "Unknwon Internal Server Error";
 
         $responseArr = [
             'success' => false,

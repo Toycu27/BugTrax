@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rule;
 
 class PasswordResetLinkController extends Controller
 {
@@ -20,7 +21,7 @@ class PasswordResetLinkController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', Rule::notIn(['demo@bugtrax.de'])],
         ]);
 
         $status = Password::sendResetLink(
