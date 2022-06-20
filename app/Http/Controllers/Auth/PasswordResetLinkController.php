@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\JsonResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
@@ -10,6 +11,8 @@ use Illuminate\Validation\Rule;
 
 class PasswordResetLinkController extends Controller
 {
+    use JsonResponseTrait;
+
     /**
      * Handle an incoming password reset link request.
      *
@@ -34,11 +37,6 @@ class PasswordResetLinkController extends Controller
             ]);
         }
 
-        return response()->json([
-            'status' => __($status),
-            'success' => true,
-            'data' => null,
-            'message' => 'Please check your Email and click the Password reset link.',
-        ], 200);
+        return $this->simpleResponse(true, __($status));
     }
 }

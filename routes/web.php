@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Traits\JsonResponseTraitClass;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +32,6 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
     ->name('register');
 
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-    ->middleware('guest')
     ->name('password.email');
 
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
@@ -48,34 +48,32 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
 
 Route::post('/sanctum/token', function (Request $request) {
     $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-        'device_name' => 'required',
+        'email' => ['required', 'exists:users', 'email'],
+        'password' => ['required'],
+        'device_name' => ['required'],
     ]);
 
+    $jsonResponser = new JsonResponseTraitClass();
     $user = User::where('email', $request->email)->first();
 
-    if (!$user || !Hash::check($request->password, $user->password)) {
-        throw ValidationException::withMessages([
-            'password' => ['The provided credentials are incorrect.'],
-        ]);
+    if (!Hash::check($request->password, $user->password)) {
+        return $jsonResponser->errorResponse(
+            'The provided credentials are incorrect.', 
+            ['password' => 'The provided credentials are incorrect.'],
+        );
     }
 
-    return response()->json([
-        'success' => true,
-        'data' => [
-            'token' => $user->createToken($request->device_name)->plainTextToken,
-            'user' => $user,
-        ],
-    ], 200);
+    return $jsonResponser->simpleResponse(true, null, 
+    [
+        'token' => $user->createToken($request->device_name)->plainTextToken,
+        'user' => $user,
+    ]);
 });
 
 Route::delete('sanctum/token', function (Request $request) {
     $request->user()->tokens()->delete();
     Session::flush();
 
-    return response()->json([
-        'success' => true,
-    ], 200);
-    return response()->json();
+    $jsonResponser = new JsonResponseTraitClass();
+    return $jsonResponser->simpleResponse(true);
 })->middleware('auth:sanctum');
