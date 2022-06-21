@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'demo',
             'email' => 'demo@bugtrax.de',
             'email_verified_at' => $faker->dateTimeBetween('-1 month', 'now'),
-            'password' => Hash::make('demo1234'),
+            'password' => Hash::make('1D2e3M4o!!!???'),
         ]);
         $users = User::factory($settings->usersAmount)->create();
         $projects = Project::factory($settings->projectsAmount)->create();
