@@ -20,6 +20,7 @@ class UserFactory extends Factory
         return [
             'timezone' => 'Europe/Berlin',
             'name' => $this->faker->name(),
+            'role' => 'Member',
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
             'password' => Hash::make($this->faker->md5()),

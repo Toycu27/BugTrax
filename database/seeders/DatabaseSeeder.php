@@ -45,6 +45,7 @@ class DatabaseSeeder extends Seeder
             'timezone' => 'Europe/Berlin',
             'name' => 'demo',
             'email' => 'demo@bugtrax.de',
+            'role' => 'Manager',
             'email_verified_at' => $faker->dateTimeBetween('-1 month', 'now'),
             'password' => Hash::make('1D2e3M4o!!!???'),
         ]);
