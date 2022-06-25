@@ -70,7 +70,7 @@ trait JsonResponseTrait
         ];
 
         throw new HttpResponseException(
-            response()->json($responseArr)
+            response()->json($responseArr, 400)
         );
     }
 }
